@@ -117,5 +117,18 @@ fun buildCrossword(
                 abs(clueRow - height / 2) + abs(clueColumn - width / 2)
             })
         }
+
+        sorted.drop(1).forEach { clueEntry ->
+            val candidate = candidates(clueEntry.word).firstOrNull()
+            candidate?.let { val (direction, rowHorizontal, columnHorizontal) = it; place(clueEntry, rowHorizontal, columnHorizontal, direction) }
+        }
+        return Grid(width, height, cells, usedPairs)
     }
+
+    var best: Grid? = null
+    for (attempt in 0 until attempts) {
+        val grid = generateOnce(seedBase + attempt) ?: continue
+        if (best == null || grid.utilization() > best.utilization()) best = grid
+    }
+    return best ?: error("Kunne ikke generere gitter")
 }
