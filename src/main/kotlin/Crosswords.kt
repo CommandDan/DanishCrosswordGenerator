@@ -46,6 +46,7 @@ fun buildCrossword(
                         'H' if wordRow + 1 < height && isLetter(wordRow + 1, wordColumn) -> return false
                         'V' if wordColumn - 1 >= 0 && isLetter(wordRow, wordColumn - 1) -> return false
                         'V' if wordColumn + 1 < width && isLetter(wordRow, wordColumn + 1) -> return false
+                        else -> { /* ok: ingen nabo-konflikt for tom celle */ }
                     }
                     is Clue -> return false
                     is Letter -> {
