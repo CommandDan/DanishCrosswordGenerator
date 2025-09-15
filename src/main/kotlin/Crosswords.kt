@@ -6,6 +6,7 @@ import dk.marcusrokatis.data.ClueCell
 import dk.marcusrokatis.data.ClueEntry
 import dk.marcusrokatis.data.Grid
 import dk.marcusrokatis.data.Letter
+import kotlin.math.max
 import kotlin.random.Random
 
 fun buildCrossword(
@@ -19,7 +20,7 @@ fun buildCrossword(
 
     val filtered = entries.filteredByLength(minLength, maxLength)
 
-    fun generateOnce(seed: Int): Grid {
+    fun generateOnce(seed: Int): Grid? {
         val random = Random(seed)
         val sorted = filtered.shuffledSortedByLongestWord(random)
         val cells = MutableCellGrid(height, width) { _, _ -> Block}
@@ -74,6 +75,17 @@ fun buildCrossword(
                 cells[wordRow][wordColumn] = Letter(char)
                 letters[wordRow to wordColumn] = char
             }
+        }
+
+        val first = sorted.first()
+        val horizontalStart = max(1, (width - first.word.length) / 2 + 1)
+        val verticalStart = max(1, (height - first.word.length) / 2 + 1)
+        when {
+            canPlace(first.word, height / 2, horizontalStart, 'H', false) ->
+                place(first, height / 2, horizontalStart, 'H')
+            canPlace(first.word, verticalStart, width / 2, 'V', false) ->
+                place(first, verticalStart, width / 2, 'V')
+            else -> return null
         }
     }
 }
