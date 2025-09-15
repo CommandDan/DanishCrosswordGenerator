@@ -51,3 +51,13 @@ typealias MutableCharacterGridMap = MutableMap<Pair<Int,Int>, Char>
 fun CharacterGridMap(): CharacterGridMap = mapOf()
 
 fun MutableCharacterGridMap(): MutableCharacterGridMap = mutableMapOf()
+
+
+typealias WordCandidate = Triple<Char, Int, Int>
+
+
+typealias WordCandidateList = List<WordCandidate>
+typealias MutableWordCandidateList = MutableList<WordCandidate>
+
+fun WordCandidateList(): WordCandidateList = listOf()
+fun MutableWordCandidateList(): MutableWordCandidateList = mutableListOf()

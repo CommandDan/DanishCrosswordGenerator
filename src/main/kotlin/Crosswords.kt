@@ -2,6 +2,8 @@ package dk.marcusrokatis
 
 import dk.marcusrokatis.data.Block
 import dk.marcusrokatis.data.Clue
+import dk.marcusrokatis.data.ClueCell
+import dk.marcusrokatis.data.ClueEntry
 import dk.marcusrokatis.data.Grid
 import dk.marcusrokatis.data.Letter
 import kotlin.random.Random
@@ -60,6 +62,18 @@ fun buildCrossword(
 
             if (requireCross && crosses == 0 && letters.isNotEmpty()) return false
             return true
+        }
+
+        fun place(clueEntry: ClueEntry, row: Int, column: Int, direction: Char) {
+            val (clueRow, clueColumn) = if (direction == 'H') row to (column - 1) else (row - 1) to column
+            cells[clueRow][clueColumn] = Clue(ClueCell(clueEntry.clue, direction))
+            usedPairs += clueEntry
+            clueEntry.word.forEachIndexed { index, char ->
+                val wordRow = if (direction == 'V') row + index else row
+                val wordColumn = if (direction == 'H') column + index else column
+                cells[wordRow][wordColumn] = Letter(char)
+                letters[wordRow to wordColumn] = char
+            }
         }
     }
 }
