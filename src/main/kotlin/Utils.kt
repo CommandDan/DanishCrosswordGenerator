@@ -3,8 +3,8 @@ package dk.marcusrokatis
 import com.charleskorn.kaml.Yaml
 import dk.marcusrokatis.data.ClueEntries
 import dk.marcusrokatis.data.ClueEntry
-import dk.marcusrokatis.data.Letter
 import kotlinx.serialization.Serializable
+import org.openpdf.text.pdf.PdfPCell
 import java.io.File
 import kotlin.random.Random
 
@@ -39,3 +39,10 @@ fun ClueEntryList.filteredByLength(minLength: Int, maxLength: Int) =
 
 fun ClueEntryList.shuffledSortedByLongestWord(random: Random) =
     shuffled(random).sortedByDescending { it.word.length }
+
+
+var PdfPCell.padding: Float
+    get() = this.paddingTop // alle fire sider har samme værdi, så top er nok
+    set(value) {
+        this.setPadding(value)
+    }
