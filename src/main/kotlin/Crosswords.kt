@@ -6,6 +6,7 @@ import dk.marcusrokatis.data.ClueCell
 import dk.marcusrokatis.data.ClueEntry
 import dk.marcusrokatis.data.Grid
 import dk.marcusrokatis.data.Letter
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.random.Random
 
@@ -86,6 +87,35 @@ fun buildCrossword(
             canPlace(first.word, verticalStart, width / 2, 'V', false) ->
                 place(first, verticalStart, width / 2, 'V')
             else -> return null
+        }
+
+        fun candidates(word: String): WordCandidateList {
+            val list = MutableWordCandidateList()
+            val posByChar = letters.entries.groupBy({ it.value }, { it.key })
+            for (index in word.indices) {
+                val char = word[index]
+                for ((wordRow, wordColumn) in posByChar[char] ?: emptyList()) {
+                    val columnHorizontal = wordColumn - index; val rowHorizontal = wordRow
+                    if (columnHorizontal >= 1 && rowHorizontal >= 0 && canPlace(word, rowHorizontal, columnHorizontal, 'H', true))
+                        list += Triple('H', rowHorizontal, columnHorizontal)
+                    val rowVertical = wordRow - index; val columnVertical = wordColumn
+                    if (rowVertical >= 1 && columnVertical >= 0 && canPlace(word, rowVertical, columnVertical, 'V', true))
+                        list += Triple('V', rowVertical, columnVertical)
+                }
+            }
+            return list.sortedWith(compareByDescending<WordCandidate> {
+                val (direction, row, column) = it
+                when (direction) {
+                    'H' -> (0 until word.length).count { index -> cells[row][column + index] is Letter }
+                    'V' -> (0 until word.length).count { index -> cells[row + index][column] is Letter }
+                    else -> 0
+                }
+            }.thenBy {
+                val (direction, row, column) = it
+                val clueRow = if (direction == 'H') row else row + word.length / 2
+                val clueColumn = if (direction == 'H') column + word.length / 2 else column
+                abs(clueRow - height / 2) + abs(clueColumn - width / 2)
+            })
         }
     }
 }

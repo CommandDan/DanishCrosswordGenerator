@@ -60,4 +60,5 @@ typealias WordCandidateList = List<WordCandidate>
 typealias MutableWordCandidateList = MutableList<WordCandidate>
 
 fun WordCandidateList(): WordCandidateList = listOf()
+
 fun MutableWordCandidateList(): MutableWordCandidateList = mutableListOf()
