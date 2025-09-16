@@ -1,8 +1,9 @@
 package dk.marcusrokatis.data.fallback
 
+import dk.marcusrokatis.ClueEntryList
 import dk.marcusrokatis.data.ClueEntry
 
-val DEFAULT_ENTRIES: List<ClueEntry> = listOf(
+val DEFAULT_ENTRIES: ClueEntryList = listOf(
     ClueEntry("KAT","kattedyr"), ClueEntry("HUND","hundedyr"), ClueEntry("KO","kvægdyr"),
     ClueEntry("SOL","stjerne"), ClueEntry("MÅNEN","natlys"), ClueEntry("STJERNE","lys på himlen"),
     ClueEntry("HAV","saltvand"), ClueEntry("SØ","ferskvand"), ClueEntry("REGN","nedbør"),

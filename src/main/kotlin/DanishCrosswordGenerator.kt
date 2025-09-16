@@ -2,6 +2,7 @@
 
 package dk.marcusrokatis
 
+import dk.marcusrokatis.data.fallback.DEFAULT_ENTRIES
 import org.openpdf.text.Document
 import java.awt.Color
 
@@ -18,8 +19,8 @@ fun main(rawArgs: Array<String>) {
     val outCombined = index("--combined")?.let { index -> args.getOrNull(index + 1) } ?: "combined.pdf"
     val yamlPath = index("--wordlist")?.let { index -> args.getOrNull(index + 1) }
 
-    val minLen = index("--minLen")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 2
-    val maxLen = index("--maxLen")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 12
+    val minLength = index("--minLen")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 2
+    val maxLength = index("--maxLen")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 12
     val noClues = args.any { it == "--noClues" }
     val arrows = index("--arrows")?.let { index -> args.getOrNull(index + 1)?.lowercase() in listOf("1", "true", "yes") } ?: true
     val arrowStyle = index("--arrowStyle")?.let { index -> args.getOrNull(index + 1)?.lowercase() }?.takeIf { it in listOf("arrow", "tri") } ?: "arrow"
@@ -29,6 +30,17 @@ fun main(rawArgs: Array<String>) {
     val letterFontSize = index("--letterFont")?.let { index -> args.getOrNull(index + 1)?.toFloatOrNull() } ?: 8.0f
     val grayValue = index("--gray")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull()?.coerceIn(0, 255) } ?: 230
     val answerGray = Color(grayValue, grayValue, grayValue)
+
+    val clueEntries = try {
+        yamlPath?.let { loadClueEntriesFromYamlKaml(it) } ?: DEFAULT_ENTRIES
+    } catch (exception: Exception) {
+        println("Kunne ikke læse YAML (${exception.message}). Bruger indbygget ordliste.")
+        DEFAULT_ENTRIES
+    }
+
+    val grids = sizes.mapIndexed { gridIndex, (width, height) ->
+        buildCrossword(clueEntries, width, height, attempts, minLength, maxLength, seedBase = gridIndex * 1000)
+    }
 }
 
 fun parseSizes(args: List<String>): IntPairList =
