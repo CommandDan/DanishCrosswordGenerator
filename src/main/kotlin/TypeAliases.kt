@@ -3,6 +3,13 @@ package dk.marcusrokatis
 import dk.marcusrokatis.data.Cell
 import dk.marcusrokatis.data.ClueEntry
 
+typealias IntPair = Pair<Int, Int>
+
+
+typealias IntPairList = List<IntPair>
+typealias MutableIntPairList = MutableList<IntPair>
+
+
 typealias List2D<T> = List<List<T>>
 typealias MutableList2D<T> = MutableList<MutableList<T>>
 
@@ -45,8 +52,8 @@ fun MutableClueEntryList(size: Int, init: (Int) -> ClueEntry): MutableClueEntryL
 fun MutableClueEntryList(): MutableClueEntryList = mutableListOf()
 
 
-typealias CharacterGridMap = Map<Pair<Int,Int>, Char>
-typealias MutableCharacterGridMap = MutableMap<Pair<Int,Int>, Char>
+typealias CharacterGridMap = Map<IntPair, Char>
+typealias MutableCharacterGridMap = MutableMap<IntPair, Char>
 
 fun CharacterGridMap(): CharacterGridMap = mapOf()
 
