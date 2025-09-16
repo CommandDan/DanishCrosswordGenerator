@@ -44,9 +44,16 @@ fun main(rawArgs: Array<String>) {
         println("Kunne ikke læse YAML (${exception.message}). Bruger indbygget ordliste.")
         DEFAULT_ENTRIES
     }
+
+    val providedSeed: Long? = index("--seed")?.let { index -> args.getOrNull(index + 1)?.toLongOrNull() }
+    val baseSeedMillis: Long = providedSeed ?: System.currentTimeMillis()
+    val baseSeedInt: Int = mixToIntSeed(baseSeedMillis)
+
+    println("Seed: $baseSeedMillis ${if (providedSeed == null) "(auto)" else "(fixed)"}")
     
     val grids = sizes.mapIndexed { gridIndex, (width, height) ->
-        buildCrossword(clueEntries, width, height, attempts, minLength, maxLength, seedBase = gridIndex * 1000)
+        val seedForThisGrid = baseSeedInt + gridIndex * 100_000 // stabil offset per grid
+        buildCrossword(clueEntries, width, height, attempts, minLength, maxLength, seedBase = seedForThisGrid)
     }
 
     // --- Opret basefonte til clues og bogstaver (Courier; monospaced; med ÆØÅ) ---
@@ -172,6 +179,8 @@ fun parseSizes(args: List<String>): IntPairList =
             sizeHorizontal.toIntOrNull()?.let { width -> sizeVertical.toIntOrNull()?.let { height -> width to height } }
         } else null
     }
+
+fun mixToIntSeed(longSeed: Long): Int = (longSeed xor (longSeed ushr 32)).toInt()
 
 // try-with-resources helper
 inline fun <T: Document, R> T.use(block: (T) -> R): R {
