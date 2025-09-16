@@ -3,8 +3,15 @@
 package dk.marcusrokatis
 
 import dk.marcusrokatis.data.fallback.DEFAULT_ENTRIES
+import org.openpdf.text.Chunk
 import org.openpdf.text.Document
+import org.openpdf.text.Font
+import org.openpdf.text.PageSize
+import org.openpdf.text.Paragraph
+import org.openpdf.text.pdf.BaseFont
+import org.openpdf.text.pdf.PdfWriter
 import java.awt.Color
+import java.io.FileOutputStream
 
 fun main(rawArgs: Array<String>) {
     val args = rawArgs.toList()
@@ -37,9 +44,123 @@ fun main(rawArgs: Array<String>) {
         println("Kunne ikke læse YAML (${exception.message}). Bruger indbygget ordliste.")
         DEFAULT_ENTRIES
     }
-
+    
     val grids = sizes.mapIndexed { gridIndex, (width, height) ->
         buildCrossword(clueEntries, width, height, attempts, minLength, maxLength, seedBase = gridIndex * 1000)
+    }
+
+    // --- Opret basefonte til clues og bogstaver (Courier; monospaced; med ÆØÅ) ---
+    val clueBaseFont   = BaseFont.createFont(BaseFont.COURIER, BaseFont.IDENTITY_H, BaseFont.EMBEDDED)
+    val letterBaseFont = clueBaseFont
+
+// Puzzles
+    Document(PageSize.A4).use { document ->
+        PdfWriter.getInstance(document, FileOutputStream(outPuzzles))
+        document.open()
+        grids.forEachIndexed { gridIndex, grid ->
+            document.add(Paragraph("Automatisk krydsord – ${grid.width}×${grid.height}", Font(Font.HELVETICA, 16f, Font.BOLD)))
+            document.add(Chunk.NEWLINE)
+            addGridTable(
+                document = document,
+                grid = grid,
+                showLetters = false,
+                cellHeight = cellHeight,
+                clueFontSize = clueFontSize,
+                letterFontSize = letterFontSize,
+                answerGray = answerGray,
+                arrows = arrows,
+                arrowStyle = arrowStyle,
+                clueBaseFont = clueBaseFont,
+                letterBaseFont = letterBaseFont
+            )
+            if (!noClues) {
+                document.add(Chunk.NEWLINE)
+                val used = grid.usedPairs.map { it.clue }.toSet()
+                    .sortedWith(compareBy<String> { it.length }.thenBy { it })
+                document.add(Paragraph("Stikord brugt på denne side", Font(Font.HELVETICA, 10f, Font.BOLD)))
+                document.add(Paragraph(used.joinToString(", "), Font(Font.HELVETICA, 9f)))
+            }
+            if (gridIndex != grids.lastIndex) document.newPage()
+        }
+        document.close()
+    }
+
+// Solutions
+    Document(PageSize.A4).use { document ->
+        PdfWriter.getInstance(document, FileOutputStream(outSolutions))
+        document.open()
+        grids.forEachIndexed { gridIndex, grid ->
+            document.add(Paragraph("Løsning – ${grid.width}×${grid.height}", Font(Font.HELVETICA, 16f, Font.BOLD)))
+            document.add(Chunk.NEWLINE)
+            addGridTable(
+                document = document,
+                grid = grid,
+                showLetters = true,
+                cellHeight = cellHeight,
+                clueFontSize = clueFontSize,
+                letterFontSize = letterFontSize,
+                answerGray = answerGray,
+                arrows = arrows,
+                arrowStyle = arrowStyle,
+                clueBaseFont = clueBaseFont,
+                letterBaseFont = letterBaseFont
+            )
+            if (gridIndex != grids.lastIndex) document.newPage()
+        }
+        document.close()
+    }
+
+// Combined: alle krydsord først, derefter alle løsninger
+    Document(PageSize.A4).use { document ->
+        PdfWriter.getInstance(document, FileOutputStream(outCombined))
+        document.open()
+        // Puzzles section
+        grids.forEachIndexed { gridIndex, grid ->
+            document.add(Paragraph("Automatisk krydsord – ${grid.width}×${grid.height}", Font(Font.HELVETICA, 16f, Font.BOLD)))
+            document.add(Chunk.NEWLINE)
+            addGridTable(
+                document = document,
+                grid = grid,
+                showLetters = false,
+                cellHeight = cellHeight,
+                clueFontSize = clueFontSize,
+                letterFontSize = letterFontSize,
+                answerGray = answerGray,
+                arrows = arrows,
+                arrowStyle = arrowStyle,
+                clueBaseFont = clueBaseFont,
+                letterBaseFont = letterBaseFont
+            )
+            if (!noClues) {
+                document.add(Chunk.NEWLINE)
+                val used = grid.usedPairs.map { it.clue }.toSet()
+                    .sortedWith(compareBy<String> { it.length }.thenBy { it })
+                document.add(Paragraph("Stikord brugt på denne side", Font(Font.HELVETICA, 10f, Font.BOLD)))
+                document.add(Paragraph(used.joinToString(", "), Font(Font.HELVETICA, 9f)))
+            }
+            if (gridIndex != grids.lastIndex) document.newPage()
+        }
+        // Solutions section (ny side før)
+        document.newPage()
+        grids.forEachIndexed { gridIndex, grid ->
+            document.add(Paragraph("Løsning – ${grid.width}×${grid.height}", Font(Font.HELVETICA, 16f, Font.BOLD)))
+            document.add(Chunk.NEWLINE)
+            addGridTable(
+                document = document,
+                grid = grid,
+                showLetters = true,
+                cellHeight = cellHeight,
+                clueFontSize = clueFontSize,
+                letterFontSize = letterFontSize,
+                answerGray = answerGray,
+                arrows = arrows,
+                arrowStyle = arrowStyle,
+                clueBaseFont = clueBaseFont,
+                letterBaseFont = letterBaseFont
+            )
+            if (gridIndex != grids.lastIndex) document.newPage()
+        }
+        document.close()
     }
 }
 
