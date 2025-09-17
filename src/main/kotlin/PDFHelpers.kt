@@ -91,6 +91,7 @@ fun addGridTable(
     document: Document,
     grid: Grid,
     showLetters: Boolean,
+    showAllCells: Boolean,
     clueFontSize: Float,
     letterFontSize: Float,
     answerGray: Color,
@@ -140,11 +141,11 @@ fun addGridTable(
                     verticalAlignment = Element.ALIGN_MIDDLE
                 }
             }
-            is Block -> PdfPCell().apply { border = Rectangle.NO_BORDER }
+            is Block -> if (showAllCells) PdfPCell(Paragraph("")) else PdfPCell().apply { border = Rectangle.NO_BORDER }
         }
         pdfCell.fixedHeight = cellSize
         pdfCell.padding = padding
-        if (cell !is Block) pdfCell.border = Rectangle.BOX else pdfCell.border = Rectangle.NO_BORDER
+        if (cell !is Block || showAllCells) pdfCell.border = Rectangle.BOX else pdfCell.border = Rectangle.NO_BORDER
         return pdfCell
     }
 

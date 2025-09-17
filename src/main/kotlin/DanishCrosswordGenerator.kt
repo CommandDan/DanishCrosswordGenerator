@@ -37,6 +37,8 @@ fun main(rawArgs: Array<String>) {
     val grayValue = index("--gray")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull()?.coerceIn(0, 255) } ?: 230
     val answerGray = Color(grayValue, grayValue, grayValue)
 
+    val showAllCells = args.any { it == "--showAllCells" }
+
     val clueEntries = try {
         yamlPath?.let { loadClueEntriesFromYamlKaml(it) } ?: DEFAULT_ENTRIES
     } catch (exception: Exception) {
@@ -70,6 +72,7 @@ fun main(rawArgs: Array<String>) {
                 document = document,
                 grid = grid,
                 showLetters = false,
+                showAllCells = showAllCells,
                 clueFontSize = clueFontSize,
                 letterFontSize = letterFontSize,
                 answerGray = answerGray,
@@ -101,6 +104,7 @@ fun main(rawArgs: Array<String>) {
                 document = document,
                 grid = grid,
                 showLetters = true,
+                showAllCells = showAllCells,
                 clueFontSize = clueFontSize,
                 letterFontSize = letterFontSize,
                 answerGray = answerGray,
@@ -126,6 +130,7 @@ fun main(rawArgs: Array<String>) {
                 document = document,
                 grid = grid,
                 showLetters = false,
+                showAllCells = showAllCells,
                 clueFontSize = clueFontSize,
                 letterFontSize = letterFontSize,
                 answerGray = answerGray,
@@ -152,6 +157,7 @@ fun main(rawArgs: Array<String>) {
                 document = document,
                 grid = grid,
                 showLetters = true,
+                showAllCells = showAllCells,
                 clueFontSize = clueFontSize,
                 letterFontSize = letterFontSize,
                 answerGray = answerGray,
