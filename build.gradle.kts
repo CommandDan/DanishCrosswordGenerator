@@ -2,6 +2,7 @@ plugins {
     kotlin("jvm") version "2.2.20"
     kotlin("plugin.serialization") version "2.2.20"
     application
+    id("com.gradleup.shadow") version "9.1.0"
 }
 
 group = "dk.marcusrokatis"
@@ -30,4 +31,25 @@ kotlin {
 
 application {
     mainClass.set("$group.DanishCrosswordGenerator")
+}
+
+// Reproducible JAR'er (ingen fil-timestamps, stabil orden)
+tasks.withType<Jar>().configureEach {
+    isPreserveFileTimestamps = false
+    isReproducibleFileOrder = true
+}
+
+// Shadow JAR: én kørbar -all.jar med Main-Class sat
+tasks.shadowJar {
+    archiveBaseName.set("DanishCrosswordGenerator")
+    archiveVersion.set(project.version.toString())
+    archiveClassifier.set("all")
+
+    manifest.attributes(
+        mapOf("Main-Class" to application.mainClass.get())
+    )
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    // mergeServiceFiles() // hvis du får service/metadata-konflikter
+    // undlad minimize() for OpenPDF/TTF/kaml
 }
