@@ -140,11 +140,11 @@ fun addGridTable(
                     verticalAlignment = Element.ALIGN_MIDDLE
                 }
             }
-            is Block -> PdfPCell(Paragraph(""))
+            is Block -> PdfPCell().apply { border = Rectangle.NO_BORDER }
         }
         pdfCell.fixedHeight = cellHeight
         pdfCell.padding = padding
-        pdfCell.border = Rectangle.BOX
+        if (cell !is Block) pdfCell.border = Rectangle.BOX else pdfCell.border = Rectangle.NO_BORDER
         return pdfCell
     }
 
