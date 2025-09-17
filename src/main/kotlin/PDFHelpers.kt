@@ -91,7 +91,6 @@ fun addGridTable(
     document: Document,
     grid: Grid,
     showLetters: Boolean,
-    cellHeight: Float,
     clueFontSize: Float,
     letterFontSize: Float,
     answerGray: Color,

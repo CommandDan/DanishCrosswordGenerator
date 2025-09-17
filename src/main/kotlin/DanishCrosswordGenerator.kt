@@ -32,7 +32,6 @@ fun main(rawArgs: Array<String>) {
     val arrows = index("--arrows")?.let { index -> args.getOrNull(index + 1)?.lowercase() in listOf("1", "true", "yes") } ?: true
     val arrowStyle = index("--arrowStyle")?.let { index -> args.getOrNull(index + 1)?.lowercase() }?.takeIf { it in listOf("arrow", "tri") } ?: "arrow"
 
-    val cellHeight = index("--cellHeight")?.let { index -> args.getOrNull(index + 1)?.toFloatOrNull() } ?: 18f
     val clueFontSize = index("--clueFont")?.let { index -> args.getOrNull(index + 1)?.toFloatOrNull() } ?: 6.0f
     val letterFontSize = index("--letterFont")?.let { index -> args.getOrNull(index + 1)?.toFloatOrNull() } ?: 8.0f
     val grayValue = index("--gray")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull()?.coerceIn(0, 255) } ?: 230
@@ -71,7 +70,6 @@ fun main(rawArgs: Array<String>) {
                 document = document,
                 grid = grid,
                 showLetters = false,
-                cellHeight = cellHeight,
                 clueFontSize = clueFontSize,
                 letterFontSize = letterFontSize,
                 answerGray = answerGray,
@@ -103,7 +101,6 @@ fun main(rawArgs: Array<String>) {
                 document = document,
                 grid = grid,
                 showLetters = true,
-                cellHeight = cellHeight,
                 clueFontSize = clueFontSize,
                 letterFontSize = letterFontSize,
                 answerGray = answerGray,
@@ -129,7 +126,6 @@ fun main(rawArgs: Array<String>) {
                 document = document,
                 grid = grid,
                 showLetters = false,
-                cellHeight = cellHeight,
                 clueFontSize = clueFontSize,
                 letterFontSize = letterFontSize,
                 answerGray = answerGray,
@@ -156,7 +152,6 @@ fun main(rawArgs: Array<String>) {
                 document = document,
                 grid = grid,
                 showLetters = true,
-                cellHeight = cellHeight,
                 clueFontSize = clueFontSize,
                 letterFontSize = letterFontSize,
                 answerGray = answerGray,
