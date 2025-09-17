@@ -57,7 +57,7 @@ fun main(rawArgs: Array<String>) {
     }
 
     // --- Opret basefonte til clues og bogstaver (Courier; monospaced; med ÆØÅ) ---
-    val clueBaseFont   = BaseFont.createFont(BaseFont.COURIER, BaseFont.IDENTITY_H, BaseFont.EMBEDDED)
+    val clueBaseFont   = BaseFont.createFont(BaseFont.COURIER, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED)
     val letterBaseFont = clueBaseFont
 
 // Puzzles
