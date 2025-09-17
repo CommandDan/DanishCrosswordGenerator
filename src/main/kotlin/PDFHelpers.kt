@@ -112,6 +112,7 @@ fun addGridTable(
     val verticalArrow = if (arrowStyle == "tri") "▾ " else "↓ "
 
     val columnWidth = availableWidth / grid.width
+    val cellSize = columnWidth // square cells: height == width
 
     fun cellFor(cell: Cell): PdfPCell {
         val pdfCell = when (cell) {
@@ -122,7 +123,7 @@ fun addGridTable(
                     baseFont = clueBaseFont,
                     baseFontSize = clueFontSize,
                     columnWidth = columnWidth,
-                    cellHeight = cellHeight,
+                    cellHeight = cellSize,
                     padding = padding
                 )
                 PdfPCell(paragraph).apply {
@@ -131,7 +132,7 @@ fun addGridTable(
                 }
             }
             is Letter -> {
-                val fontSize = chooseLetterFontSize(letterFontSize, cellHeight, padding)
+                val fontSize = chooseLetterFontSize(letterFontSize, cellSize, padding)
                 val text = if (showLetters) cell.letter.toString() else ""
                 val paragraph = Paragraph(text, Font(letterBaseFont, fontSize, Font.NORMAL))
                 PdfPCell(paragraph).apply {
@@ -142,7 +143,7 @@ fun addGridTable(
             }
             is Block -> PdfPCell().apply { border = Rectangle.NO_BORDER }
         }
-        pdfCell.fixedHeight = cellHeight
+        pdfCell.fixedHeight = cellSize
         pdfCell.padding = padding
         if (cell !is Block) pdfCell.border = Rectangle.BOX else pdfCell.border = Rectangle.NO_BORDER
         return pdfCell
