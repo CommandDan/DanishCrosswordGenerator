@@ -2,6 +2,7 @@
 
 package dk.marcusrokatis
 
+import dk.marcusrokatis.data.Grid
 import dk.marcusrokatis.data.fallback.DEFAULT_ENTRIES
 import org.openpdf.text.Chunk
 import org.openpdf.text.Document
@@ -73,31 +74,22 @@ fun main(rawArgs: Array<String>) {
     Document(PageSize.A4).use { document ->
         PdfWriter.getInstance(document, FileOutputStream(outPuzzles))
         document.open()
-        grids.forEachIndexed { gridIndex, grid ->
-            document.add(Paragraph("Automatisk krydsord – ${grid.width}×${grid.height}", Font(Font.HELVETICA, 16f, Font.BOLD)))
-            document.add(Chunk.NEWLINE)
-            addGridTable(
-                document = document,
-                grid = grid,
-                showLetters = false,
-                showAllCells = showAllCells,
-                clueFontSize = clueFontSize,
-                letterFontSize = letterFontSize,
-                answerGray = answerGray,
-                arrows = arrows,
-                arrowStyle = arrowStyle,
-                clueBaseFont = clueBaseFont,
-                letterBaseFont = letterBaseFont
-            )
-            if (!noClues) {
-                document.add(Chunk.NEWLINE)
-                val used = grid.usedPairs.map { it.clue }.toSet()
-                    .sortedWith(compareBy<String> { it.length }.thenBy { it })
-                document.add(Paragraph("Stikord brugt på denne side", Font(Font.HELVETICA, 10f, Font.BOLD)))
-                document.add(Paragraph(used.joinToString(", "), Font(Font.HELVETICA, 9f)))
-            }
-            if (gridIndex != grids.lastIndex) document.newPage()
-        }
+        addGridPages(
+            document = document,
+            grids = grids,
+            titlePrefix = "Automatisk krydsord",
+            showLetters = false,
+            showAllCells = showAllCells,
+            includeCluesBelowGrid = !noClues,
+            clueFontSize = clueFontSize,
+            letterFontSize = letterFontSize,
+            answerGray = answerGray,
+            arrows = arrows,
+            arrowStyle = arrowStyle,
+            clueBaseFont = clueBaseFont,
+            letterBaseFont = letterBaseFont,
+            seed = baseSeedMillis
+        )
         document.close()
     }
 
@@ -105,24 +97,22 @@ fun main(rawArgs: Array<String>) {
     Document(PageSize.A4).use { document ->
         PdfWriter.getInstance(document, FileOutputStream(outSolutions))
         document.open()
-        grids.forEachIndexed { gridIndex, grid ->
-            document.add(Paragraph("Løsning – ${grid.width}×${grid.height}", Font(Font.HELVETICA, 16f, Font.BOLD)))
-            document.add(Chunk.NEWLINE)
-            addGridTable(
-                document = document,
-                grid = grid,
-                showLetters = true,
-                showAllCells = showAllCells,
-                clueFontSize = clueFontSize,
-                letterFontSize = letterFontSize,
-                answerGray = answerGray,
-                arrows = arrows,
-                arrowStyle = arrowStyle,
-                clueBaseFont = clueBaseFont,
-                letterBaseFont = letterBaseFont
-            )
-            if (gridIndex != grids.lastIndex) document.newPage()
-        }
+        addGridPages(
+            document = document,
+            grids = grids,
+            titlePrefix = "Løsning",
+            showLetters = true,
+            showAllCells = showAllCells,
+            includeCluesBelowGrid = false,
+            clueFontSize = clueFontSize,
+            letterFontSize = letterFontSize,
+            answerGray = answerGray,
+            arrows = arrows,
+            arrowStyle = arrowStyle,
+            clueBaseFont = clueBaseFont,
+            letterBaseFont = letterBaseFont,
+            seed = baseSeedMillis
+        )
         document.close()
     }
 
@@ -131,51 +121,40 @@ fun main(rawArgs: Array<String>) {
         PdfWriter.getInstance(document, FileOutputStream(outCombined))
         document.open()
         // Puzzles section
-        grids.forEachIndexed { gridIndex, grid ->
-            document.add(Paragraph("Automatisk krydsord – ${grid.width}×${grid.height}", Font(Font.HELVETICA, 16f, Font.BOLD)))
-            document.add(Chunk.NEWLINE)
-            addGridTable(
-                document = document,
-                grid = grid,
-                showLetters = false,
-                showAllCells = showAllCells,
-                clueFontSize = clueFontSize,
-                letterFontSize = letterFontSize,
-                answerGray = answerGray,
-                arrows = arrows,
-                arrowStyle = arrowStyle,
-                clueBaseFont = clueBaseFont,
-                letterBaseFont = letterBaseFont
-            )
-            if (!noClues) {
-                document.add(Chunk.NEWLINE)
-                val used = grid.usedPairs.map { it.clue }.toSet()
-                    .sortedWith(compareBy<String> { it.length }.thenBy { it })
-                document.add(Paragraph("Stikord brugt på denne side", Font(Font.HELVETICA, 10f, Font.BOLD)))
-                document.add(Paragraph(used.joinToString(", "), Font(Font.HELVETICA, 9f)))
-            }
-            if (gridIndex != grids.lastIndex) document.newPage()
-        }
+        addGridPages(
+            document = document,
+            grids = grids,
+            titlePrefix = "Automatisk krydsord",
+            showLetters = false,
+            showAllCells = showAllCells,
+            includeCluesBelowGrid = !noClues,
+            clueFontSize = clueFontSize,
+            letterFontSize = letterFontSize,
+            answerGray = answerGray,
+            arrows = arrows,
+            arrowStyle = arrowStyle,
+            clueBaseFont = clueBaseFont,
+            letterBaseFont = letterBaseFont,
+            seed = baseSeedMillis
+        )
         // Solutions section (ny side før)
         document.newPage()
-        grids.forEachIndexed { gridIndex, grid ->
-            document.add(Paragraph("Løsning – ${grid.width}×${grid.height}", Font(Font.HELVETICA, 16f, Font.BOLD)))
-            document.add(Chunk.NEWLINE)
-            addGridTable(
-                document = document,
-                grid = grid,
-                showLetters = true,
-                showAllCells = showAllCells,
-                clueFontSize = clueFontSize,
-                letterFontSize = letterFontSize,
-                answerGray = answerGray,
-                arrows = arrows,
-                arrowStyle = arrowStyle,
-                clueBaseFont = clueBaseFont,
-                letterBaseFont = letterBaseFont
-            )
-            if (gridIndex != grids.lastIndex) document.newPage()
-        }
+        addGridPages(
+            document = document,
+            grids = grids,
+            titlePrefix = "Løsning",
+            showLetters = true,
+            showAllCells = showAllCells,
+            includeCluesBelowGrid = false,
+            clueFontSize = clueFontSize,
+            letterFontSize = letterFontSize,
+            answerGray = answerGray,
+            arrows = arrows,
+            arrowStyle = arrowStyle,
+            clueBaseFont = clueBaseFont,
+            letterBaseFont = letterBaseFont,
+            seed = baseSeedMillis
+        )
         document.close()
     }
 }
@@ -194,4 +173,46 @@ fun mixToIntSeed(longSeed: Long): Int = (longSeed xor (longSeed ushr 32)).toInt(
 // try-with-resources helper
 inline fun <T: Document, R> T.use(block: (T) -> R): R {
     try { return block(this) } finally { if (this.isOpen) this.close() }
+}
+
+fun addGridPages(
+    document: Document,
+    grids: List<Grid>,
+    titlePrefix: String,
+    showLetters: Boolean,
+    showAllCells: Boolean,
+    includeCluesBelowGrid: Boolean,
+    clueFontSize: Float,
+    letterFontSize: Float,
+    answerGray: Color,
+    arrows: Boolean,
+    arrowStyle: String,
+    clueBaseFont: BaseFont,
+    letterBaseFont: BaseFont,
+    seed: Long
+) {
+    grids.forEachIndexed { gridIndex, grid ->
+        document.add(Paragraph("$titlePrefix – ${grid.width}×${grid.height} (Seed: $seed)", Font(Font.HELVETICA, 16f, Font.BOLD)))
+        document.add(Chunk.NEWLINE)
+        addGridTable(
+            document = document,
+            grid = grid,
+            showLetters = showLetters,
+            showAllCells = showAllCells,
+            clueFontSize = clueFontSize,
+            letterFontSize = letterFontSize,
+            answerGray = answerGray,
+            arrows = arrows,
+            arrowStyle = arrowStyle,
+            clueBaseFont = clueBaseFont,
+            letterBaseFont = letterBaseFont
+        )
+        if (includeCluesBelowGrid) {
+            document.add(Chunk.NEWLINE)
+            val used = grid.usedPairs.map { it.clue }.toSet().sortedWith(compareBy<String> { it.length }.thenBy { it })
+            document.add(Paragraph("Stikord brugt på denne side", Font(Font.HELVETICA, 10f, Font.BOLD)))
+            document.add(Paragraph(used.joinToString(", "), Font(Font.HELVETICA, 9f)))
+        }
+        if (gridIndex != grids.lastIndex) document.newPage()
+    }
 }
