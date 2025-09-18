@@ -3,8 +3,14 @@ package dk.marcusrokatis
 import dk.marcusrokatis.data.Block
 import dk.marcusrokatis.data.Cell
 import dk.marcusrokatis.data.Clue
+import dk.marcusrokatis.data.CrosswordParameters
+import dk.marcusrokatis.data.DebugParameters
+import dk.marcusrokatis.data.FontParameters
 import dk.marcusrokatis.data.Grid
 import dk.marcusrokatis.data.Letter
+import dk.marcusrokatis.data.PageParameters
+import dk.marcusrokatis.data.StyleParameters
+import org.openpdf.text.Chunk
 import org.openpdf.text.Document
 import org.openpdf.text.Element
 import org.openpdf.text.Font
@@ -155,4 +161,37 @@ fun addGridTable(
         }
     }
     document.add(table)
+}
+
+fun Document.addGridPages(
+    pageParameters: PageParameters,
+    crosswordParameters: CrosswordParameters,
+    styleParameters: StyleParameters,
+    fontParameters: FontParameters,
+    debugParameters: DebugParameters
+) {
+    crosswordParameters.grids.forEachIndexed { gridIndex, grid ->
+        this.add(Paragraph("${pageParameters.titlePrefix} – ${grid.width}×${grid.height} (Seed: ${crosswordParameters.seed})", Font(Font.HELVETICA, 16f, Font.BOLD)))
+        this.add(Chunk.NEWLINE)
+        addGridTable(
+            document = this,
+            grid = grid,
+            showLetters = pageParameters.showLetters,
+            showAllCells = debugParameters.showAllCells,
+            clueFontSize = fontParameters.clueFontSize,
+            letterFontSize = fontParameters.letterFontSize,
+            answerGray = styleParameters.answerGray,
+            arrows = styleParameters.arrows,
+            arrowStyle = styleParameters.arrowStyle,
+            clueBaseFont = fontParameters.clueBaseFont,
+            letterBaseFont = fontParameters.letterBaseFont
+        )
+        if (pageParameters.includeCluesBelowGrid) {
+            this.add(Chunk.NEWLINE)
+            val used = grid.usedPairs.map { it.clue }.toSet().sortedWith(compareBy<String> { it.length }.thenBy { it })
+            this.add(Paragraph("Stikord brugt på denne side", Font(Font.HELVETICA, 10f, Font.BOLD)))
+            this.add(Paragraph(used.joinToString(", "), Font(Font.HELVETICA, 9f)))
+        }
+        if (gridIndex != crosswordParameters.grids.lastIndex) this.newPage()
+    }
 }
