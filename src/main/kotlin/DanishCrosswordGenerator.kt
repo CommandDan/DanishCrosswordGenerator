@@ -41,6 +41,7 @@ fun main(rawArgs: Array<String>) {
     val debug = args.any { it == "--debug" }
     val showAllCells = args.any { it == "--showAllCells" }
     val noMinimize = args.any { it == "--noMinimize" }
+    val allowDuplicateCrosswords = args.any { it == "--allowDuplicateCrosswords" }
 
     val clueEntries = try {
         yamlPath?.let { loadClueEntriesFromYamlKaml(it) } ?: DEFAULT_ENTRIES
@@ -55,13 +56,14 @@ fun main(rawArgs: Array<String>) {
 
     println("Seed: $baseSeedMillis ${if (providedSeed == null) "(auto)" else "(fixed)"}")
     
-    val grids = sizes.mapIndexed { gridIndex, (width, height) ->
+    val gridsRaw = sizes.mapIndexed { gridIndex, (width, height) ->
         val seedForThisGrid = baseSeedInt + gridIndex * 100_000 // stabil offset per grid
-        buildCrossword(clueEntries, width, height, attempts, minLength, maxLength, seedBase = seedForThisGrid).let { if (!noMinimize) it.minimized else it }
+        buildCrossword(clueEntries, width, height, attempts, minLength, maxLength, seedBase = seedForThisGrid).let { if (noMinimize) it else it.minimized }
     }
+    val grids = if (allowDuplicateCrosswords) gridsRaw else gridsRaw.distinctBy { it.cells }
 
     if (debug) grids.forEachIndexed { gridIndex, grid ->
-        println("Gitter #$gridIndex (${grid.width}x${grid.height}) bruger bredde ${grid.usedWidth} og højde ${grid.usedHeight}. Udnyttelse: ${(grid.utilization * 100).withDigits(2)}%") }
+        println("Gitter #$gridIndex (${grid.width}x${grid.height}) bruger bredde ${grid.usedWidth} og højde ${grid.usedHeight}. Udnyttelse: ${(grid.utilization * 100).withDigits(2)}%. Hashcode: ${grid.hashCode()}") }
 
     // --- Opret basefonte til clues og bogstaver (Courier; monospaced; med ÆØÅ) ---
     val clueBaseFont   = BaseFont.createFont(BaseFont.COURIER, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED)
