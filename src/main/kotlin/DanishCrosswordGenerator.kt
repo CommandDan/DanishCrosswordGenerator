@@ -32,8 +32,10 @@ fun main(rawArgs: Array<String>) {
 
     val clueFontSize = index("--clueFont")?.let { index -> args.getOrNull(index + 1)?.toFloatOrNull() } ?: 6.0f
     val letterFontSize = index("--letterFont")?.let { index -> args.getOrNull(index + 1)?.toFloatOrNull() } ?: 8.0f
-    val grayValue = index("--gray")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull()?.coerceIn(0, 255) } ?: 230
-    val answerGray = Color(grayValue, grayValue, grayValue)
+    val answerGrayValue = index("--answerGray")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull()?.coerceIn(0, 255) } ?: 230
+    val clueGrayValue = index("--clueGray")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull()?.coerceIn(0, 255) } ?: 200
+    val answerGray = Color(answerGrayValue, answerGrayValue, answerGrayValue)
+    val clueGray = Color(clueGrayValue, clueGrayValue, clueGrayValue)
 
     // Debug parametre
     val debug = args.any { it == "--debug" }
@@ -80,7 +82,7 @@ fun main(rawArgs: Array<String>) {
         includeCluesBelowGrid = !noClues
     )
 
-    val solutionPageParameters = PageParameters( // Opsætning til løsning
+    val solutionPageParameters = PageParameters( // Opsætning til løsninger
         titlePrefix = "Løsning",
         showLetters = true,
         includeCluesBelowGrid = false
@@ -93,6 +95,7 @@ fun main(rawArgs: Array<String>) {
 
     val styleParameters = StyleParameters(
         answerGray = answerGray,
+        clueGray = clueGray,
         arrows = arrows,
         arrowStyle = arrowStyle
     )

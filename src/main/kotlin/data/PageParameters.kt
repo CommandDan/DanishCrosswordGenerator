@@ -1,6 +1,5 @@
 package dk.marcusrokatis.data
 
-import org.openpdf.text.Document
 import org.openpdf.text.pdf.BaseFont
 import java.awt.Color
 
@@ -17,6 +16,7 @@ data class CrosswordParameters(
 
 data class StyleParameters(
     val answerGray: Color,
+    val clueGray: Color,
     val arrows: Boolean,
     val arrowStyle: String
 )

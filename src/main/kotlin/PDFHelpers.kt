@@ -125,6 +125,7 @@ fun addGridTable(
                     padding = padding
                 )
                 PdfPCell(paragraph).apply {
+                    backgroundColor = styleParameters.clueGray
                     horizontalAlignment = Element.ALIGN_CENTER
                     verticalAlignment = Element.ALIGN_MIDDLE
                 }
