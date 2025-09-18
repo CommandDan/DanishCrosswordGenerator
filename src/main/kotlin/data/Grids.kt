@@ -1,6 +1,7 @@
 package dk.marcusrokatis.data
 
 import dk.marcusrokatis.CellGrid
+import dk.marcusrokatis.MutableCellGrid
 import dk.marcusrokatis.MutableClueEntryList
 import kotlin.math.max
 import kotlin.math.min
@@ -36,6 +37,15 @@ data class Grid(
     val utilization: Double get() = cells.sumOf { row ->
         row.count { it is Letter }
     }.toDouble() / (width * height).coerceAtLeast(1)
+
+    val minimized: Grid by lazy {
+        if (usedWidth == width && usedHeight == height) return@lazy this
+
+        val cellsCopy = MutableCellGrid(usedHeight, usedWidth) { row, column ->
+            cells[usedEdges.top + row][usedEdges.left + column]
+        }
+        Grid(usedWidth, usedHeight, cellsCopy, usedPairs)
+    }
 }
 
 data class GridEdges(

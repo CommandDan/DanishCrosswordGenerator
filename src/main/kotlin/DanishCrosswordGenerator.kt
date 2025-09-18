@@ -37,8 +37,10 @@ fun main(rawArgs: Array<String>) {
     val grayValue = index("--gray")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull()?.coerceIn(0, 255) } ?: 230
     val answerGray = Color(grayValue, grayValue, grayValue)
 
+    // Debug parametre
     val debug = args.any { it == "--debug" }
     val showAllCells = args.any { it == "--showAllCells" }
+    val noMinimize = args.any { it == "--noMinimize" }
 
     val clueEntries = try {
         yamlPath?.let { loadClueEntriesFromYamlKaml(it) } ?: DEFAULT_ENTRIES
@@ -55,7 +57,7 @@ fun main(rawArgs: Array<String>) {
     
     val grids = sizes.mapIndexed { gridIndex, (width, height) ->
         val seedForThisGrid = baseSeedInt + gridIndex * 100_000 // stabil offset per grid
-        buildCrossword(clueEntries, width, height, attempts, minLength, maxLength, seedBase = seedForThisGrid)
+        buildCrossword(clueEntries, width, height, attempts, minLength, maxLength, seedBase = seedForThisGrid).let { if (!noMinimize) it.minimized else it }
     }
 
     if (debug) grids.forEachIndexed { gridIndex, grid ->
