@@ -64,7 +64,13 @@ fun main(rawArgs: Array<String>) {
         println("Gitter #$gridIndex (${grid.width}x${grid.height}) bruger bredde ${grid.usedWidth} og højde ${grid.usedHeight}. Udnyttelse: ${(grid.utilization * 100).withDigits(2)}%. Hashcode: ${grid.hashCode()}") }
 
     // --- Opret basefonte til clues og bogstaver (Courier; monospaced; med ÆØÅ) ---
-    val clueBaseFont   = BaseFont.createFont(BaseFont.COURIER, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED)
+    val clueBaseFont = try {
+        loadEmbeddedBaseFontFromResource("fonts/JetBrainsMono-Regular.ttf")
+    } catch (exception: Exception) {
+        // Fallback hvis fonten ikke findes (ASCII/CP1252 kompatibel)
+        println("Kunne ikke loade JetBrains Mono fra resources (${exception.message}). Fald tilbage til Courier.")
+        BaseFont.createFont(BaseFont.COURIER, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED)
+    }
     val letterBaseFont = clueBaseFont
 
     // Side parametre

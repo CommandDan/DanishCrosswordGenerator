@@ -94,9 +94,20 @@ fun addGridTable(
         widthPercentage = 100f
     }
 
+    val fancyRight = '→'
+    val fancyDown  = '↓'
+    val triRight   = '▸'
+    val triDown    = '▾'
+
+    val canFancy = fontParameters.clueBaseFont.supports(fancyRight) && fontParameters.clueBaseFont.supports(fancyDown)
+    val canTri   = fontParameters.clueBaseFont.supports(triRight)   && fontParameters.clueBaseFont.supports(triDown)
+
     val padding = 1f
-    val horizontalArrow = if (styleParameters.arrowStyle == "tri") "▸ " else "→ "
-    val verticalArrow = if (styleParameters.arrowStyle == "tri") "▾ " else "↓ "
+    val (horizontalArrow, verticalArrow) = when (styleParameters.arrowStyle) {
+            "tri" if canTri -> "▸ " to "▾ "
+            "arrow" if canFancy -> "→ " to "↓ "
+            else -> "> " to "v "
+        }
 
     val columnWidth = availableWidth / grid.width
     val cellSize = columnWidth // square cells: height == width

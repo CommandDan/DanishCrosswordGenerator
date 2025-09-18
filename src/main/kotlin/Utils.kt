@@ -4,8 +4,10 @@ import com.charleskorn.kaml.Yaml
 import dk.marcusrokatis.data.ClueEntries
 import dk.marcusrokatis.data.ClueEntry
 import kotlinx.serialization.Serializable
+import org.openpdf.text.pdf.BaseFont
 import org.openpdf.text.pdf.PdfPCell
 import java.io.File
+import java.io.IOException
 import kotlin.random.Random
 
 fun String.normalized() = this.uppercase()
@@ -47,4 +49,23 @@ var PdfPCell.padding: Float
         this.setPadding(value)
     }
 
+
 fun Double.withDigits(digits: Int) = String.format("%.${digits}f", this)
+
+
+fun BaseFont.supports(ch: Char) = try { this.charExists(ch.code) } catch (_: Throwable) { false }
+
+fun loadEmbeddedBaseFontFromResource(resourcePath: String): BaseFont {
+    val stream = Thread.currentThread().contextClassLoader.getResourceAsStream(resourcePath)
+        ?: throw IOException("Font resource ikke fundet på classpath: $resourcePath")
+    val ttfBytes = stream.use { it.readBytes() }
+
+    return BaseFont.createFont(
+        resourcePath,          // skal matche korrekt fontnavn
+        BaseFont.IDENTITY_H,              // fuld Unicode (ÆØÅ osv.)
+        BaseFont.EMBEDDED,                // indlejr fonten i PDF'en
+        false,                            // cached = false (valgfrit)
+        ttfBytes,                         // TTF som bytes
+        null                              // pfb (kun til Type1)
+    )
+}
