@@ -131,5 +131,5 @@ fun buildCrossword(
         val grid = generateOnce(seedBase + attempt) ?: continue
         if (best == null || grid.utilization > best.utilization) best = grid
     }
-    return best ?: error("Kunne ikke generere gitter")
+    return best ?: error("Kunne ikke generere gitter ${width}x${height} med ordlængder mellem $minLength og $maxLength")
 }
