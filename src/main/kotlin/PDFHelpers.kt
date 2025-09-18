@@ -1,25 +1,11 @@
 package dk.marcusrokatis
 
-import dk.marcusrokatis.data.Block
+import dk.marcusrokatis.data.*
 import dk.marcusrokatis.data.Cell
-import dk.marcusrokatis.data.Clue
-import dk.marcusrokatis.data.CrosswordParameters
-import dk.marcusrokatis.data.DebugParameters
-import dk.marcusrokatis.data.FontParameters
-import dk.marcusrokatis.data.Grid
-import dk.marcusrokatis.data.Letter
-import dk.marcusrokatis.data.PageParameters
-import dk.marcusrokatis.data.StyleParameters
-import org.openpdf.text.Chunk
-import org.openpdf.text.Document
-import org.openpdf.text.Element
-import org.openpdf.text.Font
-import org.openpdf.text.Paragraph
-import org.openpdf.text.Rectangle
+import org.openpdf.text.*
 import org.openpdf.text.pdf.BaseFont
 import org.openpdf.text.pdf.PdfPCell
 import org.openpdf.text.pdf.PdfPTable
-import java.awt.Color
 import kotlin.math.max
 import kotlin.math.min
 
@@ -97,14 +83,9 @@ fun addGridTable(
     document: Document,
     grid: Grid,
     showLetters: Boolean,
-    showAllCells: Boolean,
-    clueFontSize: Float,
-    letterFontSize: Float,
-    answerGray: Color,
-    arrows: Boolean,
-    arrowStyle: String,
-    clueBaseFont: BaseFont,
-    letterBaseFont: BaseFont
+    styleParameters: StyleParameters,
+    fontParameters: FontParameters,
+    debugParameters: DebugParameters
 ) {
     val availableWidth = document.pageSize.width - document.leftMargin() - document.rightMargin()
     val table = PdfPTable(grid.width).apply {
@@ -114,8 +95,8 @@ fun addGridTable(
     }
 
     val padding = 1f
-    val horizontalArrow = if (arrowStyle == "tri") "▸ " else "→ "
-    val verticalArrow = if (arrowStyle == "tri") "▾ " else "↓ "
+    val horizontalArrow = if (styleParameters.arrowStyle == "tri") "▸ " else "→ "
+    val verticalArrow = if (styleParameters.arrowStyle == "tri") "▾ " else "↓ "
 
     val columnWidth = availableWidth / grid.width
     val cellSize = columnWidth // square cells: height == width
@@ -123,11 +104,11 @@ fun addGridTable(
     fun cellFor(cell: Cell): PdfPCell {
         val pdfCell = when (cell) {
             is Clue -> {
-                val arrow = if (arrows) if (cell.clueInfo.dir == 'H') horizontalArrow else verticalArrow else ""
+                val arrow = if (styleParameters.arrows) if (cell.clueInfo.dir == 'H') horizontalArrow else verticalArrow else ""
                 val paragraph = autoClueParagraph(
                     text = arrow + cell.clueInfo.clueText,
-                    baseFont = clueBaseFont,
-                    baseFontSize = clueFontSize,
+                    baseFont = fontParameters.clueBaseFont,
+                    baseFontSize = fontParameters.clueFontSize,
                     columnWidth = columnWidth,
                     cellHeight = cellSize,
                     padding = padding
@@ -138,20 +119,20 @@ fun addGridTable(
                 }
             }
             is Letter -> {
-                val fontSize = chooseLetterFontSize(letterFontSize, cellSize, padding)
+                val fontSize = chooseLetterFontSize(fontParameters.letterFontSize, cellSize, padding)
                 val text = if (showLetters) cell.letter.toString() else ""
-                val paragraph = Paragraph(text, Font(letterBaseFont, fontSize, Font.NORMAL))
+                val paragraph = Paragraph(text, Font(fontParameters.letterBaseFont, fontSize, Font.NORMAL))
                 PdfPCell(paragraph).apply {
-                    backgroundColor = answerGray
+                    backgroundColor = styleParameters.answerGray
                     horizontalAlignment = Element.ALIGN_CENTER
                     verticalAlignment = Element.ALIGN_MIDDLE
                 }
             }
-            is Block -> if (showAllCells) PdfPCell(Paragraph("")) else PdfPCell().apply { border = Rectangle.NO_BORDER }
+            is Block -> if (debugParameters.showAllCells) PdfPCell(Paragraph("")) else PdfPCell().apply { border = Rectangle.NO_BORDER }
         }
         pdfCell.fixedHeight = cellSize
         pdfCell.padding = padding
-        if (cell !is Block || showAllCells) pdfCell.border = Rectangle.BOX else pdfCell.border = Rectangle.NO_BORDER
+        if (cell !is Block || debugParameters.showAllCells) pdfCell.border = Rectangle.BOX else pdfCell.border = Rectangle.NO_BORDER
         return pdfCell
     }
 
@@ -177,14 +158,9 @@ fun Document.addGridPages(
             document = this,
             grid = grid,
             showLetters = pageParameters.showLetters,
-            showAllCells = debugParameters.showAllCells,
-            clueFontSize = fontParameters.clueFontSize,
-            letterFontSize = fontParameters.letterFontSize,
-            answerGray = styleParameters.answerGray,
-            arrows = styleParameters.arrows,
-            arrowStyle = styleParameters.arrowStyle,
-            clueBaseFont = fontParameters.clueBaseFont,
-            letterBaseFont = fontParameters.letterBaseFont
+            styleParameters = styleParameters,
+            fontParameters = fontParameters,
+            debugParameters = debugParameters
         )
         if (pageParameters.includeCluesBelowGrid) {
             this.add(Chunk.NEWLINE)
