@@ -24,7 +24,7 @@ fun main(rawArgs: Array<String>) {
     val outPuzzles = index("--out")?.let { index -> args.getOrNull(index + 1) } ?: "puzzles.pdf"
     val outSolutions = index("--solutions")?.let { index -> args.getOrNull(index + 1) } ?: "solutions.pdf"
     val outCombined = index("--combined")?.let { index -> args.getOrNull(index + 1) } ?: "combined.pdf"
-    val yamlPath = index("--wordlist")?.let { index -> args.getOrNull(index + 1) }
+    val yamlPath = index("--wordlist")?.let { index -> args.getOrNull(index + 1) } ?: "GPT-WordList.yml"
 
     val minLength = index("--minLen")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 2
     val maxLength = index("--maxLen")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 12
@@ -44,7 +44,7 @@ fun main(rawArgs: Array<String>) {
     val allowDuplicateCrosswords = args.any { it == "--allowDuplicateCrosswords" }
 
     val clueEntries = try {
-        yamlPath?.let { loadClueEntriesFromYamlKaml(it) } ?: DEFAULT_ENTRIES
+        loadClueEntriesFromYamlKaml(yamlPath)
     } catch (exception: Exception) {
         println("Kunne ikke læse YAML (${exception.message}). Bruger indbygget ordliste.")
         DEFAULT_ENTRIES

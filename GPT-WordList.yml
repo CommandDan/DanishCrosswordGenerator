@@ -1,0 +1,258 @@
+entries:
+  HUND: tamt dyr
+  KAT: kattedyr
+  KO: kvæg
+  FÅR: ulddyr
+  HEST: ridedyr
+  GRIS: svin
+  GED: hornet dyr
+  ULV: rovdyr
+  RÆV: listigt dyr
+  ELG: skovdyr
+  HARE: hurtigt dyr
+  MUS: lille gnaver
+  ROTTE: gnaver
+  SÆL: havpattedyr
+  HVAL: stort pattedyr
+  DYR: levende væsen
+  FISK: svømmer
+  ÅL: lang fisk
+  TORSK: havfisk
+  LAX: fed fisk
+  ØRRED: ferskvandsfisk
+  ÅRER: til roning
+  BÅD: lille fartøj
+  SKIB: stort fartøj
+  FÆRGE: overfart
+  HAVN: skibssted
+  HAV: saltvand
+  SØ: ferskvand
+  Å: lille vandløb
+  Ø: lille ø
+  STRAND: sandbred
+  KLIT: sandbakke
+  MARK: agerjord
+  ENG: græsmark
+  SKOV: træområde
+  TRÆ: stor plante
+  GREN: trædel
+  BLADE: på træer
+  BLOMST: planteblomst
+  ROSEN: tornet blomst
+  TULIPAN: løgplante
+  LILJE: blomst
+  KORN: markafgrøde
+  BYG: kornsort
+  HAVRE: kornsort
+  RUG: kornsort
+  HVEDE: kornsort
+  BRØD: bagt dej
+  KAGE: sødt bagværk
+  BOLLE: lille brød
+  SMØR: fedtstof
+  OST: mælkeprodukt
+  MÆLK: hvid drik
+  ÆG: fugleæg
+  KØD: animalsk mad
+  FARS: hakket kød
+  PØLSE: fars i skind
+  LEVER: indmad
+  SILD: marineret fisk
+  REJE: skaldyr
+  KRABBE: skaldyr
+  MUSLING: skaldyr
+  GRØD: kogt korn
+  SUPPE: varm skål
+  SOVS: sauce
+  SALAT: grønt fad
+  AGURK: grøn grøntsag
+  TOMAT: rød frugt
+  ÆRT: lille grøntsag
+  LØG: stærk knold
+  KARTOFFEL: rodknold
+  GULEROD: orange rod
+  PERSILLE: krydderurt
+  DILD: krydderurt
+  BASILIKUM: krydderurt
+  PEBER: krydderi
+  SALT: krydderi
+  SUKKER: sødestof
+  HONNING: bi-sødme
+  KAFFE: mørk drik
+  TE: varm drik
+  ØL: humledrik
+  VIN: druedrik
+  VAND: klar væske
+  SODAVAND: brus
+  IS: frossen dessert
+  FRUGT: sød plante
+  ÆBLE: rund frugt
+  PÆRE: grøn frugt
+  APPELSIN: citrusfrugt
+  CITRON: syrlig frugt
+  BANAN: gul frugt
+  DRUE: lille bær
+  JORDBÆR: rødt bær
+  BLÅBÆR: skovbær
+  SOLBÆR: sort bær
+  HINDBÆR: rødt bær
+  KIRSEBÆR: rødt bær
+  BLOMME: stenfrugt
+  MELON: stor frugt
+  ANANAS: tropisk frugt
+  KOKOS: hård nød
+  NØD: hård frugt
+  MANDLER: nødder
+  HASSELNØD: nød
+  VALNØD: nød
+  BOG: læsestof
+  AVIS: dagblad
+  SPILLEKORT: spar to
+  BREV: post
+  PAKKE: forsendelse
+  HUS: bolig
+  HJEM: bolig
+  LEJLIGHED: boligtype
+  RUM: værelse
+  KØKKEN: madrum
+  STUE: opholdsrum
+  BADEVÆRELSE: vådrum
+  GANG: passage
+  DØR: indgang
+  VINDUE: glasåbning
+  TAG: husets top
+  VÆG: skilleflade
+  GULV: man går på
+  LOFT: overhovedet
+  LAMPE: lysgiver
+  STOL: sidemøbel
+  BORD: flade på ben
+  SOFA: sidemøbel
+  SENG: møbel til søvn
+  SKAB: opbevaring
+  HYLDEN: reolplads
+  TÆPPE: gulvtekstiler
+  GARDIN: vinduesstof
+  TÆNDE: sætte i gang
+  SLUKKE: stoppe lys
+  ÅBNE: gøre åben
+  LUKKE: gøre lukket
+  LÆSE: kigge i bog
+  SKRIVE: lave tekst
+  TALE: bruge ord
+  HØRE: opfatte lyd
+  SE: opfatte syn
+  LØBE: hurtig gang
+  GÅ: bevæge sig
+  CYKLE: køre på cykel
+  KØRE: føre køretøj
+  SVØMME: bevæge i vand
+  HOPPE: springe
+  SPØRGE: stille spørgsmål
+  SVARE: give svar
+  GRINE: le
+  SMILE: mild latter
+  GRÆDE: fælde tårer
+  SOVE: hvile
+  VÅGNE: blive vågen
+  SPISE: indtage mad
+  DRIKKE: indtage væske
+  KØBE: anskaffe
+  SÆLGE: afstå
+  BYTTE: skifte
+  FINDE: opdage
+  SØGE: lede efter
+  HENTE: bringe
+  BÆRE: holde på
+  SKUBBE: presse væk
+  TRÆKKE: hale ind
+  ÅBENT: ikke lukket
+  LUKKET: ikke åbent
+  VARM: høj temperatur
+  KOLD: lav temperatur
+  TUNG: vejer meget
+  LET: vejer lidt
+  STOR: ikke lille
+  LILLE: ikke stor
+  LANG: ikke kort
+  KORT: ikke lang
+  HURTIG: ikke langsom
+  LANGSOM: ikke hurtig
+  GLAD: i godt humør
+  SUR: i dårligt humør
+  VEN: god bekendt
+  FJENDE: modstander
+  MAND: voksen han
+  KVINDE: voksen hun
+  BARN: lille menneske
+  BABY: spæd
+  MOR: kvindelig forælder
+  FAR: mandlig forælder
+  SØN: drengebarn
+  DATTER: pigebarn
+  BROR: mandligt søskende
+  SØSTER: kvindeligt søskende
+  FAMILIE: slægt
+  LÆRER: underviser
+  ELEV: studerende
+  VENINDE: kvindelig ven
+  KOLLEGA: medarbejder
+  CHEF: leder
+  ARBEJDE: job
+  MØDE: samling
+  SKOLE: læringssted
+  HOSPITAL: sygehus
+  TANDLÆGE: tanddoktor
+  LÆGE: doktor
+  POLITI: ordensmagt
+  BRANDVÆSEN: ildslukker
+  POST: brevservice
+  BANK: pengehus
+  BUTIK: forretning
+  RESTAURANT: spisested
+  CAFE: kaffested
+  BAGER: brødmand
+  SLAGTER: kødhandler
+  FRISØR: hårklipper
+  MEKANIKER: bilreparatør
+  MALER: farvelægger
+  MURER: stenbygger
+  TØMRER: træhåndværker
+  ELEKTRIKER: ledningsmand
+  SYGEPLERSKE: plejer
+  PILOT: flyfører
+  SØMAND: søfolk
+  BONDE: landmand
+  PRÆST: kirketjener
+  KIRKE: gudshus
+  SKAT: afgift
+  LOV: regel
+  RET: domstol
+  BY: større sted
+  LAND: område
+  GADE: vej i by
+  VEJ: strækning
+  BRO: overføring
+  TUNNEL: underføring
+  PARK: grønt område
+  TORV: plads
+  PLADS: åben plads
+  PLANTER: grønne ting
+  VEJR: atmosfære
+  SOL: stjerne
+  MÅNE: jordens følgesvend
+  SKY: vanddamp
+  REGN: nedbør
+  SNE: nedbør
+  TÅGE: dis
+  BLÆST: vind
+  STORM: kraftig vind
+  TORDEN: lyn og brag
+  LYN: elektrisk gnist
+  DAG: lys tid
+  NAT: mørk tid
+  MORGEN: tidlig dag
+  AFTEN: sen dag
+  UGE: syv dage
+  MÅNED: ca. 30 dage
+  ÅR: tolv måneder
