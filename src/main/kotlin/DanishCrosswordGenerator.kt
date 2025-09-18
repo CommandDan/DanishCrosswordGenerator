@@ -37,6 +37,7 @@ fun main(rawArgs: Array<String>) {
     val grayValue = index("--gray")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull()?.coerceIn(0, 255) } ?: 230
     val answerGray = Color(grayValue, grayValue, grayValue)
 
+    val debug = args.any { it == "--debug" }
     val showAllCells = args.any { it == "--showAllCells" }
 
     val clueEntries = try {
@@ -56,6 +57,9 @@ fun main(rawArgs: Array<String>) {
         val seedForThisGrid = baseSeedInt + gridIndex * 100_000 // stabil offset per grid
         buildCrossword(clueEntries, width, height, attempts, minLength, maxLength, seedBase = seedForThisGrid)
     }
+
+    if (debug) grids.forEachIndexed { gridIndex, grid ->
+        println("Gitter #$gridIndex (${grid.width}x${grid.height}) bruger bredde ${grid.usedWidth} og højde ${grid.usedHeight}. Udnyttelse: ${(grid.utilization * 100).withDigits(2)}%") }
 
     // --- Opret basefonte til clues og bogstaver (Courier; monospaced; med ÆØÅ) ---
     val clueBaseFont   = BaseFont.createFont(BaseFont.COURIER, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED)

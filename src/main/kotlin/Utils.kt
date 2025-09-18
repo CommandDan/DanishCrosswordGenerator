@@ -46,3 +46,5 @@ var PdfPCell.padding: Float
     set(value) {
         this.setPadding(value)
     }
+
+fun Double.withDigits(digits: Int) = String.format("%.${digits}f", this)

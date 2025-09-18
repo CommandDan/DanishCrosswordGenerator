@@ -129,7 +129,7 @@ fun buildCrossword(
     var best: Grid? = null
     for (attempt in 0 until attempts) {
         val grid = generateOnce(seedBase + attempt) ?: continue
-        if (best == null || grid.utilization() > best.utilization()) best = grid
+        if (best == null || grid.utilization > best.utilization) best = grid
     }
     return best ?: error("Kunne ikke generere gitter")
 }
