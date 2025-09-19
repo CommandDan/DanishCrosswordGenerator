@@ -99,6 +99,8 @@ fun main(rawArgs: Array<String>) {
         DEFAULT_ENTRIES
     }
 
+    log("Antal ord i listen: ${clueEntries.size}")
+
     val providedSeed: Long? = index("--seed")?.let { index -> args.getOrNull(index + 1)?.toLongOrNull() }
     val baseSeedMillis: Long = providedSeed ?: System.currentTimeMillis()
     val baseSeedInt: Int = mixToIntSeed(baseSeedMillis)
