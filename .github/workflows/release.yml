@@ -5,6 +5,9 @@ on:
     tags:
       - 'v*'           # Kør KUN når der pushes et tag, fx v1.2.3
 
+permissions:
+  contents: write   # <— kræves for at oprette en release
+
 jobs:
   release:
     runs-on: ubuntu-latest
