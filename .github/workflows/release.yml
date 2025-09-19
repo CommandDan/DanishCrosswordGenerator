@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'           # Kør KUN når der pushes et tag, fx v1.2.3
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Temurin JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Make Gradle executable
+        run: chmod +x gradlew
+
+      # 1) Tjek at gradle.properties version matcher tagget (vX.Y.Z)
+      - name: Validate release version (gradle task)
+        run: ./gradlew --no-daemon releaseVersion
+
+      # 2) Byg artefakter
+      - name: Build shadowJar
+        run: ./gradlew --no-daemon clean shadowJar
+
+      - name: Build releaseZip
+        run: ./gradlew --no-daemon releaseZip
+
+      # 3) Upload som GitHub Release
+      - name: Create GitHub Release and upload assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            build/libs/*-all.jar
+            build/releases/*.zip
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

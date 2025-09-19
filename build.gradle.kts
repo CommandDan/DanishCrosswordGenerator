@@ -7,9 +7,6 @@ plugins {
     id("com.gradleup.shadow") version "9.1.0"
 }
 
-group = "dk.marcusrokatis"
-version = "1.2-SNAPSHOT"
-
 repositories {
     mavenCentral()
 }
@@ -105,4 +102,47 @@ tasks.register<Zip>("releaseZip") {
     // reproducible zip
     isPreserveFileTimestamps = false
     isReproducibleFileOrder = true
+}
+
+// --- Release version guard: ensure project.version matches tag "vX.Y.Z" ---
+tasks.register("releaseVersion") {
+    group = "release"
+    description = "Validates that project.version matches the provided release tag (vX.Y.Z)."
+
+    doLast {
+        val projectVersion = project.version.toString()
+
+        // Tag kan komme fra:
+        //  - CI: GITHUB_REF=refs/tags/v1.2.3
+        //  - CLI: -PreleaseTag=v1.2.3
+        //  - (fallback) TAG env
+        val fromGithubRef = System.getenv("GITHUB_REF") ?: ""
+        val tagFromGithub = fromGithubRef.substringAfter("refs/tags/", missingDelimiterValue = "")
+        val tagFromProp = (project.findProperty("releaseTag") as String?) ?: ""
+        val tagFromEnv = System.getenv("TAG") ?: ""
+
+        val rawTag = listOf(tagFromProp, tagFromGithub, tagFromEnv).firstOrNull { it.isNotBlank() } ?: ""
+
+        if (rawTag.isBlank()) {
+            throw GradleException(
+                "No release tag provided. Supply -PreleaseTag=vX.Y.Z or set GITHUB_REF/ TAG environment variable."
+            )
+        }
+
+        // Forventet format: vX.Y.Z (evt. med prærelease/build metadata, justér regex hvis ønsket)
+        val tagRegex = Regex("""^v(\d+\.\d+\.\d+)(?:[-+].*)?$""")
+        val match = tagRegex.matchEntire(rawTag)
+            ?: throw GradleException("Invalid tag format '$rawTag'. Expected 'vX.Y.Z' (e.g., v1.2.3).")
+
+        val tagVersion = match.groupValues[1] // uden 'v'
+
+        if (projectVersion != tagVersion) {
+            throw GradleException(
+                "Project version ($projectVersion) does not match tag ($rawTag). " +
+                        "Update version in gradle.properties to '$tagVersion' or retag."
+            )
+        }
+
+        println("✔ releaseVersion: tag $rawTag matches project.version=$projectVersion")
+    }
 }
