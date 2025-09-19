@@ -183,3 +183,49 @@ fun Document.addGridPages(
         if (gridIndex != crosswordParameters.grids.lastIndex) this.newPage()
     }
 }
+
+fun Document.addGenerationParametersPage(
+    generationParameters: GenerationParameters
+) {
+    val (crosswordParameters, fileParameters, styleParameters, fontParameters, colorParameters, debugParameters) = generationParameters
+
+    val (sizes, attempts, minLength, maxLength) = crosswordParameters
+    val (puzzlesFile, solutionsFile, combinedFile, wordListFile) = fileParameters
+    val (noClues, arrows, arrowStyle) = styleParameters
+    val (clueFontSize, letterFontSize) = fontParameters
+    val (answerGrayValue, clueGrayValue) = colorParameters
+    val (debug, showAllCells, noMinimize, allowDuplicateCrosswords) = debugParameters
+
+    val separator = "–".repeat(15)
+
+    val parametersFormatted = listOf(
+        "Størrelser: $sizes",
+        "Forsøg: $attempts",
+        "Minimum ordlængde: $minLength",
+        "Maximum ordlængde: $maxLength",
+        separator,
+        "Fil med opgaver: $puzzlesFile",
+        "Fil med løsninger: $solutionsFile",
+        "Fil med både opgaver og løsninger: $combinedFile",
+        "Fil med ordliste: $wordListFile",
+        separator,
+        "Vis brugte ord: ${!noClues}",
+        "Pile: $arrows",
+        "Pilestil: $arrowStyle",
+        separator,
+        "Skriftstørrelse til ledetråde: $clueFontSize",
+        "Skriftstørrelse til bogstaver: $letterFontSize",
+        separator,
+        "Grå værdi for ledetråde: $clueGrayValue",
+        "Grå værdi for bogstaver: $answerGrayValue",
+        separator,
+        "Debug-tilstand: $debug",
+        "Vis alle celler: $showAllCells",
+        "Minimer ikke gitre: $noMinimize",
+        "Tillad duplikerede krydsord: $allowDuplicateCrosswords"
+    )
+
+    this.add(Paragraph("Generations parametre", Font(Font.HELVETICA, 16f, Font.BOLD)))
+    this.add(Chunk.NEWLINE)
+    this.add(Paragraph(parametersFormatted.joinToString("\n"), Font(Font.HELVETICA, 12f)))
+}

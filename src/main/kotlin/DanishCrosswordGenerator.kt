@@ -43,6 +43,54 @@ fun main(rawArgs: Array<String>) {
     val noMinimize = args.any { it == "--noMinimize" }
     val allowDuplicateCrosswords = args.any { it == "--allowDuplicateCrosswords" }
 
+    val addParametersPage = args.any { it == "--addParametersPage" }
+
+    val generationCrosswordParameters = GenerationCrosswordParameters(
+        sizes = sizes,
+        attempts = attempts,
+        minLength = minLength,
+        maxLength = maxLength
+    )
+
+    val generationFileParameters = GenerationFileParameters(
+        puzzlesFile = outPuzzles,
+        solutionsFile = outSolutions,
+        combinedFile = outCombined,
+        wordListFile = yamlPath
+    )
+
+    val generationStyleParameters = GenerationStyleParameters(
+        noClues = noClues,
+        arrows = arrows,
+        arrowStyle = arrowStyle
+    )
+
+    val generationFontParameters = GenerationFontParameters(
+        clueFontSize = clueFontSize,
+        letterFontSize = letterFontSize
+    )
+
+    val generationColorParameters = GenerationColorParameters(
+        answerGrayValue = answerGrayValue,
+        clueGrayValue = clueGrayValue
+    )
+
+    val generationDebugParameters = GenerationDebugParameters(
+        debug = debug,
+        showAllCells = showAllCells,
+        noMinimize = noMinimize,
+        allowDuplicateCrosswords = allowDuplicateCrosswords
+    )
+
+    val generationParameters = GenerationParameters(
+        crosswordParameters = generationCrosswordParameters,
+        fileParameters = generationFileParameters,
+        styleParameters = generationStyleParameters,
+        fontParameters = generationFontParameters,
+        colorParameters = generationColorParameters,
+        debugParameters = generationDebugParameters
+    )
+
     val clueEntries = try {
         loadClueEntriesFromYamlKaml(yamlPath)
     } catch (exception: Exception) {
@@ -122,6 +170,10 @@ fun main(rawArgs: Array<String>) {
             fontParameters,
             debugParameters
         )
+        if (addParametersPage) {
+            document.newPage()
+            document.addGenerationParametersPage(generationParameters)
+        }
         document.close()
     }
 
@@ -136,6 +188,10 @@ fun main(rawArgs: Array<String>) {
             fontParameters,
             debugParameters
         )
+        if (addParametersPage) {
+            document.newPage()
+            document.addGenerationParametersPage(generationParameters)
+        }
         document.close()
     }
 
@@ -160,6 +216,10 @@ fun main(rawArgs: Array<String>) {
             fontParameters,
             debugParameters
         )
+        if (addParametersPage) {
+            document.newPage()
+            document.addGenerationParametersPage(generationParameters)
+        }
         document.close()
     }
 }
