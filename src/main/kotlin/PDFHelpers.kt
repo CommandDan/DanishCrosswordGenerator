@@ -115,7 +115,7 @@ fun addGridTable(
     fun cellFor(cell: Cell): PdfPCell {
         val pdfCell = when (cell) {
             is Clue -> {
-                val arrow = if (styleParameters.arrows) if (cell.clueInfo.dir == 'H') horizontalArrow else verticalArrow else ""
+                val arrow = if (styleParameters.arrows) if (cell.clueInfo.direction == Direction.HORIZONTAL) horizontalArrow else verticalArrow else ""
                 val paragraph = autoClueParagraph(
                     text = arrow + cell.clueInfo.clueText,
                     baseFont = fontParameters.clueBaseFont,

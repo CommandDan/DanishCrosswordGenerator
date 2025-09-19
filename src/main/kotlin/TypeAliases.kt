@@ -2,6 +2,7 @@ package dk.marcusrokatis
 
 import dk.marcusrokatis.data.Cell
 import dk.marcusrokatis.data.ClueEntry
+import dk.marcusrokatis.data.Direction
 
 typealias IntPair = Pair<Int, Int>
 
@@ -60,7 +61,7 @@ fun CharacterGridMap(): CharacterGridMap = mapOf()
 fun MutableCharacterGridMap(): MutableCharacterGridMap = mutableMapOf()
 
 
-typealias WordCandidate = Triple<Char, Int, Int>
+typealias WordCandidate = Triple<Direction, Int, Int>
 
 
 typealias WordCandidateList = List<WordCandidate>
