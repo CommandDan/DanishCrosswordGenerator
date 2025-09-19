@@ -44,6 +44,7 @@ fun main(rawArgs: Array<String>) {
     val allowDuplicateCrosswords = args.any { it == "--allowDuplicateCrosswords" }
 
     val addParametersPage = args.any { it == "--addParametersPage" }
+    val addLogsPage = args.any { it == "--addLogsPage" }
 
     val generationCrosswordParameters = GenerationCrosswordParameters(
         sizes = sizes,
@@ -94,7 +95,7 @@ fun main(rawArgs: Array<String>) {
     val clueEntries = try {
         loadClueEntriesFromYamlKaml(yamlPath)
     } catch (exception: Exception) {
-        println("Kunne ikke læse YAML (${exception.message}). Bruger indbygget ordliste.")
+        log("Kunne ikke læse YAML (${exception.message}). Bruger indbygget ordliste.")
         DEFAULT_ENTRIES
     }
 
@@ -102,7 +103,7 @@ fun main(rawArgs: Array<String>) {
     val baseSeedMillis: Long = providedSeed ?: System.currentTimeMillis()
     val baseSeedInt: Int = mixToIntSeed(baseSeedMillis)
 
-    println("Seed: $baseSeedMillis ${if (providedSeed == null) "(auto)" else "(fixed)"}")
+    log("Seed: $baseSeedMillis ${if (providedSeed == null) "(auto)" else "(fixed)"}")
     
     val gridsRaw = sizes.mapIndexed { gridIndex, (width, height) ->
         val seedForThisGrid = baseSeedInt + gridIndex * 100_000 // stabil offset per grid
@@ -111,14 +112,14 @@ fun main(rawArgs: Array<String>) {
     val grids = if (allowDuplicateCrosswords) gridsRaw else gridsRaw.distinctBy { it.cells }
 
     if (debug) grids.forEachIndexed { gridIndex, grid ->
-        println("Gitter #$gridIndex (${grid.width}x${grid.height}) bruger bredde ${grid.usedWidth} og højde ${grid.usedHeight}. Udnyttelse: ${(grid.utilization * 100).withDigits(2)}%. Hashcode: ${grid.hashCode()}") }
+        log("Gitter #$gridIndex (${grid.width}x${grid.height}) bruger bredde ${grid.usedWidth} og højde ${grid.usedHeight}. Udnyttelse: ${(grid.utilization * 100).withDigits(2)}%. Hashcode: ${grid.hashCode()}") }
 
     // --- Opret basefonte til clues og bogstaver (Courier; monospaced; med ÆØÅ) ---
     val clueBaseFont = try {
         loadEmbeddedBaseFontFromResource("fonts/JetBrainsMono-Regular.ttf")
     } catch (exception: Exception) {
         // Fallback hvis fonten ikke findes (ASCII/CP1252 kompatibel)
-        println("Kunne ikke loade JetBrains Mono fra resources (${exception.message}). Fald tilbage til Courier.")
+        log("Kunne ikke loade JetBrains Mono fra resources (${exception.message}). Fald tilbage til Courier.")
         BaseFont.createFont(BaseFont.COURIER, BaseFont.WINANSI, BaseFont.NOT_EMBEDDED)
     }
     val letterBaseFont = clueBaseFont
@@ -170,10 +171,8 @@ fun main(rawArgs: Array<String>) {
             fontParameters,
             debugParameters
         )
-        if (addParametersPage) {
-            document.newPage()
-            document.addGenerationParametersPage(generationParameters)
-        }
+        if (addParametersPage) document.addGenerationParametersPage(generationParameters)
+        if (addLogsPage) document.addLogsPage(logs)
         document.close()
     }
 
@@ -188,10 +187,8 @@ fun main(rawArgs: Array<String>) {
             fontParameters,
             debugParameters
         )
-        if (addParametersPage) {
-            document.newPage()
-            document.addGenerationParametersPage(generationParameters)
-        }
+        if (addParametersPage) document.addGenerationParametersPage(generationParameters)
+        if (addLogsPage) document.addLogsPage(logs)
         document.close()
     }
 
@@ -216,10 +213,8 @@ fun main(rawArgs: Array<String>) {
             fontParameters,
             debugParameters
         )
-        if (addParametersPage) {
-            document.newPage()
-            document.addGenerationParametersPage(generationParameters)
-        }
+        if (addParametersPage) document.addGenerationParametersPage(generationParameters)
+        if (addLogsPage) document.addLogsPage(logs)
         document.close()
     }
 }

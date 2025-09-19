@@ -225,7 +225,17 @@ fun Document.addGenerationParametersPage(
         "Tillad duplikerede krydsord: $allowDuplicateCrosswords"
     )
 
+    this.newPage()
     this.add(Paragraph("Generations parametre", Font(Font.HELVETICA, 16f, Font.BOLD)))
     this.add(Chunk.NEWLINE)
     this.add(Paragraph(parametersFormatted.joinToString("\n"), Font(Font.HELVETICA, 12f)))
+}
+
+fun Document.addLogsPage(
+    logs: List<String>
+) {
+    this.newPage()
+    this.add(Paragraph("Program log", Font(Font.HELVETICA, 16f, Font.BOLD)))
+    this.add(Chunk.NEWLINE)
+    this.add(Paragraph(logs.joinToString("\n"), Font(Font.HELVETICA, 12f)))
 }
