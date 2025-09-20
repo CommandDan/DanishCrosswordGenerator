@@ -1,0 +1,7 @@
+entries:
+  TEST: ["Prøve", "Eksamen"]
+  HJEM: ["Bolig", "Bo"]
+  FARVE: ["Rød", "Gul", "Grøn", "Blå"]
+  OST: ["Mælkeprodukt", "Mejeriprodukt"]
+  FLOT: ["Pæn"]
+  HERRE: ["Mand"]

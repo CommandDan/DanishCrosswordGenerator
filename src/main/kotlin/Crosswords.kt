@@ -19,6 +19,7 @@ fun buildCrossword(
     maxLength: Int,
     seedBase: Int = 0
 ): Grid {
+    log("Genererer krydsord med størrelse $width gange $height. Forsøger $attempts gange:\nOrdlængder mellem $minLength og $maxLength. Seed $seedBase.")
 
     val filtered = entries.filteredByLength(minLength, maxLength)
 

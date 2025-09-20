@@ -70,3 +70,6 @@ typealias MutableWordCandidateList = MutableList<WordCandidate>
 fun WordCandidateList(): WordCandidateList = listOf()
 
 fun MutableWordCandidateList(): MutableWordCandidateList = mutableListOf()
+
+
+typealias ClueDictionary = Map<String, List<String>>
