@@ -98,9 +98,9 @@ fun main(rawArgs: Array<String>) {
     } catch (exception: Exception) {
         log("Kunne ikke læse YAML (${exception.message}). Bruger indbygget ordliste.")
         DEFAULT_ENTRIES
-    }
+    }.distinct()
 
-    val clueEntries = if (addMeanings) clueEntriesRaw.meaningsAdded() else clueEntriesRaw
+    val clueEntries = (if (addMeanings) clueEntriesRaw.meaningsAdded().distinct() else clueEntriesRaw)
 
     log("Antal ord i oprindelig liste: ${clueEntriesRaw.size}")
     if (addMeanings) log("Antal ord efter betydninger tilføjet: ${clueEntries.size}. Tilføjede ${clueEntries.size - clueEntriesRaw.size} ord.")
