@@ -109,8 +109,7 @@ fun ClueEntryList.shuffledSortedByLongestWord(random: Random): ClueEntryList =
     shuffled(random).sortedByDescending { it.word.length }
 
 fun ClueEntryList.meaningsAdded(): ClueEntryList = this + this.mapNotNull {
-    val entryToAdd = ClueEntry(it.clue.normalized(TextCase.UPPER, true), it.word.normalized(TextCase.TITLE))
-    if (it.clue.isWord() && !this.contains(entryToAdd)) entryToAdd else null
+    if (it.clue.trim().isWord()) ClueEntry(it.clue.normalized(TextCase.UPPER, true), it.word.normalized(TextCase.TITLE)) else null
 }
 
 
