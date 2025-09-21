@@ -26,6 +26,7 @@ fun main(rawArgs: Array<String>) {
 
     val minLength = index("--minLen")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 2
     val maxLength = index("--maxLen")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 12
+    val addMeanings = index("--addMeanings")?.let { index -> args.getOrNull(index + 1)?.lowercase() in listOf("1", "true", "yes") } ?: true
     val noClues = args.any { it == "--noClues" }
     val arrows = index("--arrows")?.let { index -> args.getOrNull(index + 1)?.lowercase() in listOf("1", "true", "yes") } ?: true
     val arrowStyle = index("--arrowStyle")?.let { index -> args.getOrNull(index + 1)?.lowercase() }?.takeIf { it in listOf("arrow", "tri") } ?: "arrow"
@@ -92,14 +93,17 @@ fun main(rawArgs: Array<String>) {
         debugParameters = generationDebugParameters
     )
 
-    val clueEntries = try {
+    val clueEntriesRaw = try {
         loadClueEntriesFromYamlKaml(yamlPath)
     } catch (exception: Exception) {
         log("Kunne ikke læse YAML (${exception.message}). Bruger indbygget ordliste.")
         DEFAULT_ENTRIES
     }
 
-    log("Antal ord i listen: ${clueEntries.size}")
+    val clueEntries = if (addMeanings) clueEntriesRaw.meaningsAdded() else clueEntriesRaw
+
+    log("Antal ord i oprindelig liste: ${clueEntriesRaw.size}")
+    if (addMeanings) log("Antal ord efter betydninger tilføjet: ${clueEntries.size}. Tilføjede ${clueEntries.size - clueEntriesRaw.size} ord.")
 
     val providedSeed: Long? = index("--seed")?.let { index -> args.getOrNull(index + 1)?.toLongOrNull() }
     val baseSeedMillis: Long = providedSeed ?: System.currentTimeMillis()

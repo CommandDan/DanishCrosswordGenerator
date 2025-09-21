@@ -54,16 +54,16 @@ data class Grid(
         }
     }
 
-    /** Rotate a cell grid 90° clockwise. Also swaps clue directions H<->V. */
+    /** Rotate a cell grid 90° clockwise. Also swaps clue directions HORIZONTAL<->VERTICAL. */
     private fun rotate90Clockwise(sourceGrid: CellGrid): CellGrid {
         log("Roterer gitter så bredde er større end højde")
         val height = sourceGrid.size
         val width = sourceGrid.firstOrNull()?.size ?: 0
         return MutableCellGrid(width, height) { row, column ->
-            when (val old = sourceGrid[height - 1 - column][row]) {
-                is Clue -> Clue(old.clueInfo.copy(direction = if (old.clueInfo.direction == Direction.HORIZONTAL) Direction.VERTICAL else Direction.HORIZONTAL))
-                is Letter -> old
-                is Block -> old
+            when (val oldCell = sourceGrid[height - 1 - column][row]) {
+                is Clue -> Clue(oldCell.clueInfo.copy(direction = if (oldCell.clueInfo.direction == Direction.HORIZONTAL) Direction.VERTICAL else Direction.HORIZONTAL))
+                is Letter -> oldCell
+                is Block -> oldCell
             }
         }
     }

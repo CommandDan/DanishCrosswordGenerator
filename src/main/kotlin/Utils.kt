@@ -29,7 +29,7 @@ fun String.toWords() = this.trim().split(Regex("\\s+")).filter { it.isNotBlank()
 
 fun String.isWord() = !this.contains(Regex("[^A-Za-zÆØÅæøå]"))
 
-fun String.titlecase() = this.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
+fun String.titlecase() = this.lowercase().replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
 
 
 @Serializable
@@ -99,14 +99,19 @@ fun loadClueEntriesFromYamlKaml(path: String): ClueEntryList =
     loadClueDictionaryFromYamlKaml(path).flatMap { (word, clues) -> clues.map { ClueEntry(word, it) } }
 
 
-fun ClueEntryList.filteredByLength(minLength: Int, maxLength: Int) =
+fun ClueEntryList.filteredByLength(minLength: Int, maxLength: Int): ClueEntryList =
     map { it.copy(word = it.word.normalized(TextCase.UPPER)) }
     .filter { it.word.all { char -> char.isLetter() } && it.word.length in minLength..maxLength }
     .distinctBy { it.word }
     .ifEmpty { error("Ingen ord efter filter (minLen=$minLength, maxLen=$maxLength)") }
 
-fun ClueEntryList.shuffledSortedByLongestWord(random: Random) =
+fun ClueEntryList.shuffledSortedByLongestWord(random: Random): ClueEntryList =
     shuffled(random).sortedByDescending { it.word.length }
+
+fun ClueEntryList.meaningsAdded(): ClueEntryList = this + this.mapNotNull {
+    val entryToAdd = ClueEntry(it.clue.normalized(TextCase.UPPER, true), it.word.normalized(TextCase.TITLE))
+    if (it.clue.isWord() && !this.contains(entryToAdd)) entryToAdd else null
+}
 
 
 /** Vælg en tilfældig ledetråd for et ord. Kaster hvis ordet ikke findes i ordbogen. */
