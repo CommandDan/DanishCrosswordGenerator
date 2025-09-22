@@ -100,9 +100,8 @@ fun loadClueEntriesFromYamlKaml(path: String): ClueEntryList =
 
 
 fun ClueEntryList.filteredByLength(minLength: Int, maxLength: Int): ClueEntryList =
-    map { it.copy(word = it.word.normalized(TextCase.UPPER)) }
-    .filter { it.word.all { char -> char.isLetter() } && it.word.length in minLength..maxLength }
-    .distinctBy { it.word }
+    map { it.copy() }
+    .filter { it.word.isWord() && it.word.length in minLength..maxLength }
     .ifEmpty { error("Ingen ord efter filter (minLen=$minLength, maxLen=$maxLength)") }
 
 fun ClueEntryList.shuffledSortedByLongestWord(random: Random): ClueEntryList =

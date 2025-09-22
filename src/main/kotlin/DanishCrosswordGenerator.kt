@@ -24,8 +24,8 @@ fun main(rawArgs: Array<String>) {
     val outCombined = index("--combined")?.let { index -> args.getOrNull(index + 1) } ?: "combined.pdf"
     val yamlPath = index("--wordlist")?.let { index -> args.getOrNull(index + 1) } ?: "GPT-WordList.yml"
 
-    val minLength = index("--minLen")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 2
-    val maxLength = index("--maxLen")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 12
+    val minLength = index("--minLength")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 2
+    val maxLength = index("--maxLength")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 12
     val addMeanings = index("--addMeanings")?.let { index -> args.getOrNull(index + 1)?.lowercase() in listOf("1", "true", "yes") } ?: true
     val noClues = args.any { it == "--noClues" }
     val arrows = index("--arrows")?.let { index -> args.getOrNull(index + 1)?.lowercase() in listOf("1", "true", "yes") } ?: true

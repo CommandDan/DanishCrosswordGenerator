@@ -9,6 +9,7 @@ import dk.marcusrokatis.data.Grid
 import dk.marcusrokatis.data.Letter
 import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.min
 import kotlin.random.Random
 
 fun buildCrossword(
@@ -21,7 +22,13 @@ fun buildCrossword(
 ): Grid {
     log("Genererer krydsord med størrelse $width gange $height. Forsøger $attempts gange:\nOrdlængder mellem $minLength og $maxLength. Seed $seedBase.")
 
-    val filtered = entries.filteredByLength(minLength, maxLength)
+    val gridMaxLength = min(maxLength, max(width, height) - 1) // -1 for clue-plads
+    val filtered = entries.filteredByLength(minLength, gridMaxLength)
+
+    log("Antal ord efter filter: ${filtered.size}. Filtrede ${entries.size - filtered.size} ord fra.")
+    if (gridMaxLength < maxLength) {
+        log("Max ordlængde sat til $gridMaxLength pga. plads til ledetråd.")
+    }
 
     fun generateOnce(seed: Int): Grid? {
         val random = Random(seed)
@@ -33,7 +40,14 @@ fun buildCrossword(
         fun isLetter(row: Int, column: Int) = cells[row][column] is Letter
 
         fun canPlace(word: String, row: Int, column: Int, direction: Direction, requireCross: Boolean): Boolean {
-            val (clueRow, clueColumn) = if (direction == Direction.HORIZONTAL) row to (column - 1) else (row - 1) to column
+            // krav: 1 celle til clue før ordet
+            if (direction == Direction.HORIZONTAL) {
+                if (column < 1 || column + word.length > width) return false
+            } else { // VERTICAL
+                if (row < 1 || row + word.length > height) return false
+            }
+            val clueRow = if (direction == Direction.HORIZONTAL) row else row - 1
+            val clueColumn = if (direction == Direction.HORIZONTAL) column - 1 else column
             if (clueRow !in 0 until height || clueColumn !in 0 until width) return false
             if (cells[clueRow][clueColumn] !is Block) return false
 
@@ -81,14 +95,28 @@ fun buildCrossword(
             }
         }
 
-        val first = sorted.first()
-        val horizontalStart = max(1, (width - first.word.length) / 2 + 1)
-        val verticalStart = max(1, (height - first.word.length) / 2 + 1)
+        val first = sorted.firstOrNull { it.word.length <= width || it.word.length <= height } ?: return null
+        val wordLength = first.word.length
+
+        val canHorizontal = wordLength <= width - 1
+        val canVertical = wordLength <= height - 1
+
+        fun centeredStartHorizontal(): Int {
+            val maxStart = width - wordLength           // sidste lovlige start (inklusive)
+            val minStart = 1                      // pga. clue til venstre
+            return minStart + (max(0, maxStart - minStart) / 2)
+        }
+        fun centeredStartVertical(): Int {
+            val maxStart = height - wordLength          // sidste lovlige start (inklusive)
+            val minStart = 1                      // pga. clue over
+            return minStart + (max(0, maxStart - minStart) / 2)
+        }
+
         when {
-            canPlace(first.word, height / 2, horizontalStart, Direction.HORIZONTAL, false) ->
-                place(first, height / 2, horizontalStart, Direction.HORIZONTAL)
-            canPlace(first.word, verticalStart, width / 2, Direction.VERTICAL, false) ->
-                place(first, verticalStart, width / 2, Direction.VERTICAL)
+            canHorizontal && canPlace(first.word, height / 2, centeredStartHorizontal(), Direction.HORIZONTAL, false) ->
+                place(first, height / 2, centeredStartHorizontal(), Direction.HORIZONTAL)
+            canVertical && canPlace(first.word, centeredStartVertical(), width / 2, Direction.VERTICAL, false) ->
+                place(first, centeredStartVertical(), width / 2, Direction.VERTICAL)
             else -> return null
         }
 
