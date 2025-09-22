@@ -51,7 +51,8 @@ fun main(rawArgs: Array<String>) {
         sizes = sizes,
         attempts = attempts,
         minLength = minLength,
-        maxLength = maxLength
+        maxLength = maxLength,
+        addMeanings = addMeanings
     )
 
     val generationFileParameters = GenerationFileParameters(
@@ -118,7 +119,8 @@ fun main(rawArgs: Array<String>) {
     val grids = if (allowDuplicateCrosswords) gridsRaw else gridsRaw.distinctBy { it.cells }
 
     if (debug) grids.forEachIndexed { gridIndex, grid ->
-        log("Gitter #$gridIndex (${grid.width}x${grid.height}) bruger bredde ${grid.usedWidth} og højde ${grid.usedHeight}. Udnyttelse: ${(grid.utilization * 100).withDigits(2)}%. Hashcode: ${grid.hashCode()}") }
+        log("Gitter #$gridIndex (${grid.width}x${grid.height}) bruger bredde ${grid.usedWidth} og højde ${grid.usedHeight}. Udnyttelse: ${(grid.utilization * 100).withDigits(2)}%. Hashcode: ${grid.hashCode()}")
+    }
 
     // --- Opret basefonte til clues og bogstaver (Courier; monospaced; med ÆØÅ) ---
     val clueBaseFont = try {
