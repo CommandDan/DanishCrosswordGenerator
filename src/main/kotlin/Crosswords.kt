@@ -18,7 +18,9 @@ fun buildCrossword(
     attempts: Int,
     minLength: Int,
     maxLength: Int,
-    seedBase: Int = 0
+    seedBase: Int = 0,
+    maxUseWord: Int = 5,
+    maxUseClue: Int = 10
 ): Grid {
     log("Genererer krydsord med størrelse $width gange $height. Forsøger $attempts gange:\nOrdlængder mellem $minLength og $maxLength. Seed $seedBase.")
 
@@ -36,6 +38,8 @@ fun buildCrossword(
         val cells = MutableCellGrid(height, width) { _, _ -> Block}
         val usedPairs = MutableClueEntryList()
         val letters = MutableCharacterGridMap()
+        val wordUses = mutableMapOf<String, Int>()
+        val clueUses = mutableMapOf<String, Int>()
 
         fun isLetter(row: Int, column: Int) = cells[row][column] is Letter
 
@@ -84,6 +88,9 @@ fun buildCrossword(
         }
 
         fun place(clueEntry: ClueEntry, row: Int, column: Int, direction: Direction) {
+            if (wordUses.getOrDefault(clueEntry.word, 0) >= maxUseWord) return // Ord er brugt nok
+            if (clueUses.getOrDefault(clueEntry.clue, 0) >= maxUseClue) return // Ledetråd er brugt nok
+
             val (clueRow, clueColumn) = if (direction == Direction.HORIZONTAL) row to (column - 1) else (row - 1) to column
             cells[clueRow][clueColumn] = Clue(ClueCell(clueEntry.clue, direction))
             usedPairs += clueEntry
@@ -93,6 +100,8 @@ fun buildCrossword(
                 cells[wordRow][wordColumn] = Letter(char)
                 letters[wordRow to wordColumn] = char
             }
+            wordUses.increment(clueEntry.word)
+            clueUses.increment(clueEntry.clue)
         }
 
         val first = sorted.firstOrNull { it.word.length <= width || it.word.length <= height } ?: return null

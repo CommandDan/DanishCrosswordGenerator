@@ -16,7 +16,9 @@ data class GenerationCrosswordParameters(
     val attempts: Int,
     val minLength: Int,
     val maxLength: Int,
-    val addMeanings: Boolean
+    val addMeanings: Boolean,
+    val maxUseWord: Int,
+    val maxUseClue: Int
 )
 
 data class GenerationFileParameters(

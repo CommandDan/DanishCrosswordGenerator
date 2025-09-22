@@ -149,3 +149,8 @@ fun loadEmbeddedBaseFontFromResource(resourcePath: String): BaseFont {
         null                              // pfb (kun til Type1)
     )
 }
+
+
+fun <T> MutableMap<T, Int>.increment(key: T, amount: Int = 1) {
+    this[key] = this.getOrDefault(key, 0) + amount
+}

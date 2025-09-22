@@ -189,7 +189,7 @@ fun Document.addGenerationParametersPage(
 ) {
     val (crosswordParameters, fileParameters, styleParameters, fontParameters, colorParameters, debugParameters) = generationParameters
 
-    val (sizes, attempts, minLength, maxLength, addMeanings) = crosswordParameters
+    val (sizes, attempts, minLength, maxLength, addMeanings, maxUseWord, maxUseClue) = crosswordParameters
     val (puzzlesFile, solutionsFile, combinedFile, wordListFile) = fileParameters
     val (noClues, arrows, arrowStyle) = styleParameters
     val (clueFontSize, letterFontSize) = fontParameters
@@ -204,6 +204,8 @@ fun Document.addGenerationParametersPage(
         "Minimum ordlængde: $minLength",
         "Maximum ordlængde: $maxLength",
         "Tilføj betydninger: $addMeanings",
+        "Maximum brug af ord: $maxUseWord",
+        "Maximum brug af ledetråd: $maxUseClue",
         separator,
         "Fil med opgaver: $puzzlesFile",
         "Fil med løsninger: $solutionsFile",

@@ -27,6 +27,9 @@ fun main(rawArgs: Array<String>) {
     val minLength = index("--minLength")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 2
     val maxLength = index("--maxLength")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 12
     val addMeanings = index("--addMeanings")?.let { index -> args.getOrNull(index + 1)?.lowercase() in listOf("1", "true", "yes") } ?: true
+    val maxUseWord = index("--maxUseWord")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 2
+    val maxUseClue = index("--maxUseClue")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 5
+
     val noClues = args.any { it == "--noClues" }
     val arrows = index("--arrows")?.let { index -> args.getOrNull(index + 1)?.lowercase() in listOf("1", "true", "yes") } ?: true
     val arrowStyle = index("--arrowStyle")?.let { index -> args.getOrNull(index + 1)?.lowercase() }?.takeIf { it in listOf("arrow", "tri") } ?: "arrow"
@@ -52,7 +55,9 @@ fun main(rawArgs: Array<String>) {
         attempts = attempts,
         minLength = minLength,
         maxLength = maxLength,
-        addMeanings = addMeanings
+        addMeanings = addMeanings,
+        maxUseWord = maxUseWord,
+        maxUseClue = maxUseClue
     )
 
     val generationFileParameters = GenerationFileParameters(
@@ -114,7 +119,7 @@ fun main(rawArgs: Array<String>) {
     
     val gridsRaw = sizes.mapIndexed { gridIndex, (width, height) ->
         val seedForThisGrid = baseSeedInt + gridIndex * 100_000 // stabil offset per grid
-        buildCrossword(clueEntries, width, height, attempts, minLength, maxLength, seedBase = seedForThisGrid).let { if (noMinimize) it else it.minimized }
+        buildCrossword(clueEntries, width, height, attempts, minLength, maxLength, seedBase = seedForThisGrid, maxUseWord = maxUseWord, maxUseClue = maxUseClue).let { if (noMinimize) it else it.minimized }
     }
     val grids = if (allowDuplicateCrosswords) gridsRaw else gridsRaw.distinctBy { it.cells }
 
