@@ -22,7 +22,7 @@ fun main(rawArgs: Array<String>) {
     val outPuzzles = index("--out")?.let { index -> args.getOrNull(index + 1) } ?: "puzzles.pdf"
     val outSolutions = index("--solutions")?.let { index -> args.getOrNull(index + 1) } ?: "solutions.pdf"
     val outCombined = index("--combined")?.let { index -> args.getOrNull(index + 1) } ?: "combined.pdf"
-    val yamlPath = index("--wordlist")?.let { index -> args.getOrNull(index + 1) } ?: "GPT-WordList.yml"
+    val yamlPath = index("--wordlist")?.let { index -> args.getOrNull(index + 1) } ?: "GPT-ThemeWordList.yml"
 
     val minLength = index("--minLength")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 2
     val maxLength = index("--maxLength")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull() } ?: 12
