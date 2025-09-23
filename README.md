@@ -43,31 +43,35 @@ java -jar build/libs/DanishCrosswordGenerator-all.jar --wordlist minordliste.yml
 
 ## ⚙️ Parametre
 
-| Flag                         | Beskrivelse                                                            | Default                      |
-|------------------------------|------------------------------------------------------------------------|------------------------------|
-| `--sizes`                    | Liste af gitterstørrelser, fx `13x13 15x15`                            | `13x13 15x15 17x17 19x19`    |
-| `--attempts`                 | Hvor mange forsøg på at placere ord per gitter                         | `800`                        |
-| `--out`                      | Filnavn for PDF med krydsord                                           | `puzzles.pdf`                |
-| `--solutions`                | Filnavn for PDF med løsninger                                          | `solutions.pdf`              |
-| `--combined`                 | Filnavn for PDF med kombineret opgaver+ løsninger                      | `combined.pdf`               |
-| `--wordlist`                 | Sti til YAML-ordliste                                                  | `GPT-WordList.yml`           |
-| `--minLength`                | Minimum ordlængde                                                      | `2`                          |
-| `--maxLength`                | Maksimum ordlængde                                                     | `12`                         |
-| `--addMeanings`              | Om synonymer/betydninger skal tilføjes (`true/false`)                  | `true`                       |
-| `--noClues`                  | Skjul ledetråde under gitteret                                         | `false`                      |
-| `--arrows`                   | Vis pile (`true/false`)                                                | `true`                       |
-| `--arrowStyle`               | Pilestil: `arrow` eller `tri`                                          | `arrow`                      |
-| `--clueFont`                 | Fontstørrelse for ledetråde                                            | `6.0`                        |
-| `--letterFont`               | Fontstørrelse for bogstaver                                            | `8.0`                        |
-| `--answerGray`               | Gråtone for svarfelter (0–255)                                         | `230`                        |
-| `--clueGray`                 | Gråtone for ledetrådsfelter (0–255)                                    | `200`                        |
-| `--debug`                    | Print ekstra debug-information til log                                 | `false`                      |
-| `--showAllCells`             | Vis også tomme celler (for debugging)                                  | `false`                      |
-| `--noMinimize`               | Undgå at trimme gitteret til brugt område                              | `false`                      |
-| `--allowDuplicateCrosswords` | Tillad at identiske gitter beholdes                                    | `false`                      |
-| `--addParametersPage`        | Tilføj en side i PDF’en med de valgte parametre                        | `false`                      |
-| `--addLogsPage`              | Tilføj en side i PDF’en med log-output                                 | `false`                      |
-| `--seed`                     | Fast seed for deterministisk output                                    | `System.currentTimeMillis()` |
+| Flag                         | Beskrivelse                                           | Default                      |
+|------------------------------|-------------------------------------------------------|------------------------------|
+| `--sizes`                    | Liste af gitterstørrelser, fx `13x13 15x15`           | `13x13 15x15 17x17 19x19`    |
+| `--attempts`                 | Hvor mange forsøg på at placere ord per gitter        | `800`                        |
+| `--out`                      | Filnavn for PDF med krydsord                          | `puzzles.pdf`                |
+| `--solutions`                | Filnavn for PDF med løsninger                         | `solutions.pdf`              |
+| `--combined`                 | Filnavn for PDF med kombineret opgaver+ løsninger     | `combined.pdf`               |
+| `--wordlist`                 | Sti til YAML-ordliste                                 | `GPT-WordList.yml`           |
+| `--minLength`                | Minimum ordlængde                                     | `2`                          |
+| `--maxLength`                | Maksimum ordlængde                                    | `12`                         |
+| `--addMeanings`              | Om synonymer/betydninger skal tilføjes (`true/false`) | `true`                       |
+| `--maxUseWord`               | Maksimum brug af ord                                  | `2`                          |
+| `--maxUseClue`               | Maksimum brug af ledetråd                             | `5`                          |
+| `--noClues`                  | Skjul ledetråde under gitteret                        | `false`                      |
+| `--arrows`                   | Vis pile (`true/false`)                               | `true`                       |
+| `--arrowStyle`               | Pilestil: `arrow` eller `tri`                         | `arrow`                      |
+| `--fillUnused`               | Om tomme celler skal fyldes                           | `false`                      |
+| `--unusedGray`               | Gråtone for ubrugte celler (0–255)                    | `0`                          |
+| `--clueFont`                 | Fontstørrelse for ledetråde                           | `6.0`                        |
+| `--letterFont`               | Fontstørrelse for bogstaver                           | `8.0`                        |
+| `--answerGray`               | Gråtone for svarfelter (0–255)                        | `230`                        |
+| `--clueGray`                 | Gråtone for ledetrådsfelter (0–255)                   | `200`                        |
+| `--debug`                    | Print ekstra debug-information til log                | `false`                      |
+| `--showAllCells`             | Vis også tomme celler (for debugging)                 | `false`                      |
+| `--noMinimize`               | Undgå at trimme gitteret til brugt område             | `false`                      |
+| `--allowDuplicateCrosswords` | Tillad at identiske gitter beholdes                   | `false`                      |
+| `--addParametersPage`        | Tilføj en side i PDF’en med de valgte parametre       | `false`                      |
+| `--addLogsPage`              | Tilføj en side i PDF’en med log-output                | `false`                      |
+| `--seed`                     | Fast seed for deterministisk output                   | `System.currentTimeMillis()` |
 
 ---
 
