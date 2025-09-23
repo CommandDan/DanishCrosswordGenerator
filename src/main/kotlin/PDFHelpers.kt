@@ -140,11 +140,15 @@ fun addGridTable(
                     verticalAlignment = Element.ALIGN_MIDDLE
                 }
             }
-            is Block -> if (debugParameters.showAllCells) PdfPCell(Paragraph("")) else PdfPCell().apply { border = Rectangle.NO_BORDER }
+            is Block -> {
+                if (styleParameters.fillUnused) PdfPCell().apply { backgroundColor = styleParameters.unusedGray }
+                if (debugParameters.showAllCells) PdfPCell(Paragraph("")) else PdfPCell().apply { border = Rectangle.NO_BORDER }
+            }
         }
         pdfCell.fixedHeight = cellSize
         pdfCell.padding = padding
-        if (cell !is Block || debugParameters.showAllCells) pdfCell.border = Rectangle.BOX else pdfCell.border = Rectangle.NO_BORDER
+        if (cell is Block && styleParameters.fillUnused) pdfCell.backgroundColor = styleParameters.unusedGray
+        if (cell !is Block || debugParameters.showAllCells || styleParameters.fillUnused) pdfCell.border = Rectangle.BOX else pdfCell.border = Rectangle.NO_BORDER
         return pdfCell
     }
 
@@ -191,7 +195,7 @@ fun Document.addGenerationParametersPage(
 
     val (sizes, attempts, minLength, maxLength, addMeanings, maxUseWord, maxUseClue) = crosswordParameters
     val (puzzlesFile, solutionsFile, combinedFile, wordListFile) = fileParameters
-    val (noClues, arrows, arrowStyle) = styleParameters
+    val (noClues, arrows, arrowStyle, fillUnused, unusedGrayValue) = styleParameters
     val (clueFontSize, letterFontSize) = fontParameters
     val (answerGrayValue, clueGrayValue) = colorParameters
     val (debug, showAllCells, noMinimize, allowDuplicateCrosswords) = debugParameters
@@ -215,6 +219,8 @@ fun Document.addGenerationParametersPage(
         "Vis brugte ord: ${!noClues}",
         "Pile: $arrows",
         "Pilestil: $arrowStyle",
+        "Fyld ubrugte celler: $fillUnused",
+        "Grå værdi for ubrugte celler: $unusedGrayValue",
         separator,
         "Skriftstørrelse til ledetråde: $clueFontSize",
         "Skriftstørrelse til bogstaver: $letterFontSize",

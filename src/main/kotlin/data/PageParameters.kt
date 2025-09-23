@@ -18,7 +18,9 @@ data class StyleParameters(
     val answerGray: Color,
     val clueGray: Color,
     val arrows: Boolean,
-    val arrowStyle: String
+    val arrowStyle: String,
+    val fillUnused: Boolean,
+    val unusedGray: Color
 )
 
 data class FontParameters(

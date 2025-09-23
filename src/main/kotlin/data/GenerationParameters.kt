@@ -31,7 +31,9 @@ data class GenerationFileParameters(
 data class GenerationStyleParameters(
     val noClues: Boolean,
     val arrows: Boolean,
-    val arrowStyle: String
+    val arrowStyle: String,
+    val fillUnused: Boolean,
+    val unusedGrayValue: Int
 )
 
 data class GenerationFontParameters(

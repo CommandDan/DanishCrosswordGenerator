@@ -33,6 +33,9 @@ fun main(rawArgs: Array<String>) {
     val noClues = args.any { it == "--noClues" }
     val arrows = index("--arrows")?.let { index -> args.getOrNull(index + 1)?.lowercase() in listOf("1", "true", "yes") } ?: true
     val arrowStyle = index("--arrowStyle")?.let { index -> args.getOrNull(index + 1)?.lowercase() }?.takeIf { it in listOf("arrow", "tri") } ?: "arrow"
+    val fillUnused = args.any { it == "--fillUnused" }
+    val unusedGrayValue = index("--unusedGray")?.let { index -> args.getOrNull(index + 1)?.toIntOrNull()?.coerceIn(0, 255) } ?: 0
+    val unusedGray = Color(unusedGrayValue, unusedGrayValue, unusedGrayValue)
 
     val clueFontSize = index("--clueFont")?.let { index -> args.getOrNull(index + 1)?.toFloatOrNull() } ?: 6.0f
     val letterFontSize = index("--letterFont")?.let { index -> args.getOrNull(index + 1)?.toFloatOrNull() } ?: 8.0f
@@ -70,7 +73,9 @@ fun main(rawArgs: Array<String>) {
     val generationStyleParameters = GenerationStyleParameters(
         noClues = noClues,
         arrows = arrows,
-        arrowStyle = arrowStyle
+        arrowStyle = arrowStyle,
+        fillUnused = fillUnused,
+        unusedGrayValue = unusedGrayValue
     )
 
     val generationFontParameters = GenerationFontParameters(
@@ -159,7 +164,9 @@ fun main(rawArgs: Array<String>) {
         answerGray = answerGray,
         clueGray = clueGray,
         arrows = arrows,
-        arrowStyle = arrowStyle
+        arrowStyle = arrowStyle,
+        fillUnused = fillUnused,
+        unusedGray = unusedGray
     )
 
     val fontParameters = FontParameters(
