@@ -55,8 +55,10 @@ tasks.shadowJar {
 
 
 // Eksterne filer
-val gptWordlistFile = layout.projectDirectory.file("GPT-WordList.yml")
-val rokatisWordlistFile = layout.projectDirectory.file("Rokatis-WordList.yml")
+val gptWordListFile = layout.projectDirectory.file("GPT-WordList.yml")
+val gptThemeWordListFile = layout.projectDirectory.file("GPT-ThemeWordList.yml")
+val gptExtendedThemeWordListFile = layout.projectDirectory.file("GPT-ThemeWordList-extended.yml")
+val rokatisWordListFile = layout.projectDirectory.file("Rokatis-WordList.yml")
 val fontsDir = layout.projectDirectory.dir("src/main/resources/fonts")
 val readmeFile = layout.projectDirectory.file("README.md")
 
@@ -83,8 +85,10 @@ tasks.register<Zip>("releaseZip") {
         rename { "${baseName}-${versionStr}-all.jar" }
     }
     // valgfrit indhold
-    maybeInclude(gptWordlistFile)
-    maybeInclude(rokatisWordlistFile)
+    maybeInclude(gptWordListFile)
+    maybeInclude(gptThemeWordListFile)
+    maybeInclude(gptExtendedThemeWordListFile)
+    maybeInclude(rokatisWordListFile)
     maybeInclude(readmeFile)
     maybeIncludeDir(fontsDir)
 

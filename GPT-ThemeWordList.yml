@@ -1,0 +1,12 @@
+
+entries:
+  DYR: ["Hund", "Kat", "Hest", "Ko", "Fugl", "Fisk", "Gris", "Ulv", "Björn", "Tiger"]
+  PLANTE: ["Blomst", "Træ", "Busk", "Græs", "Mos", "Svamp", "Gran", "Eg", "Pil", "Rose"]
+  BY: ["København", "Aarhus", "Odense", "Aalborg", "Randers", "Esbjerg", "Roskilde", "Horsens", "Vejle", "Grenaa"]
+  LAND: ["Danmark", "Sverige", "Norge", "Finland", "Tyskland", "Polen", "Frankrig", "Italien", "Spanien", "Kina"]
+  SPORT: ["Fodbold", "Håndbold", "Tennis", "Badminton", "Golf", "Roning", "Svømning", "Cykling", "Skiløb", "Atletik"]
+  INSTRUMENT: ["Klaver", "Guitar", "Violin", "Tromme", "Saxofon", "Fløjte", "Bas", "Cello", "Harmonika", "Obo"]
+  FARVE: ["Rød", "Blå", "Grøn", "Gul", "Sort", "Hvid", "Lilla", "Orange", "Brun", "Pink"]
+  KØRETØJ: ["Bil", "Bus", "Lastbil", "Cykel", "Motorcykel", "Knallert", "Skib", "Fly", "Traktor", "Tog"]
+  MØBEL: ["Stol", "Bord", "Seng", "Sofa", "Skab", "Reol", "Hylde", "Kommode", "Bænk", "Kiste"]
+  FORFATTER: ["H.C. Andersen", "Karen Blixen", "Jussi Adler-Olsen", "Suzanne Brøgger", "Tom Kristensen", "Søren Kierkegaard", "Tove Ditlevsen", "Bjarne Reuter", "Dan Turèll", "Martin A. Hansen"]
