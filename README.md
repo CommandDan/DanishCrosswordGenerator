@@ -101,4 +101,4 @@ entries:
 ## 📜 Licens
 
 Dette projekt bruger [OpenPDF](https://github.com/LibrePDF/OpenPDF) (LGPL/MPL) og [kaml](https://github.com/charleskorn/kaml) til YAML.  
-Selve generatoren er MIT-licenseret (medmindre du ændrer det).
+Selve generatoren er MIT-licenseret.
